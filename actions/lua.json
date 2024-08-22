@@ -1,0 +1,42 @@
+{
+  "alacritty xmake run": {
+    "title": "alacritty xmake run",
+    "catch": "target(",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e xmake r"
+    ],
+    "description": "alacritty and xmake run"
+  },
+  "alacritty xmake build": {
+    "title": "alacritty xmake build",
+    "catch": "target(",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e xmake build"
+    ],
+    "description": "alacritty and xmake build"
+  },
+  "alacritty xmake buildRun": {
+    "title": "alacritty xmake buildRun",
+    "catch": "target(",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e \"xmake build ; xmake run\""
+    ],
+    "description": "alacritty and xmake build"
+  },
+  "alacritty helix": {
+    "title": "alacritty helix open file",
+    "catch": "file:///",
+    "shell": [
+      "alacritty -e hx ${TM_SELECTED_TEXT}"
+    ],
+    "description": "alacritty and open helix"
+  },
+  "alacritty lua run": {
+    "title": "alacritty lua run",
+    "catch": "main",
+    "shell": [
+      "alacritty -e lua ${TM_FILENAME}"
+    ],
+    "description": "alacritty and lua run"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "alacritty xmake run": {
+    "title": "alacritty xmake run",
+    "catch": "target(",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e xmake r"
+    ],
+    "description": "alacritty and xmake run"
+  },
+  "alacritty xmake build": {
+    "title": "alacritty xmake build",
+    "catch": "target(",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e xmake build"
+    ],
+    "description": "alacritty and xmake build"
+  },
+  "alacritty xmake buildRun": {
+    "title": "alacritty xmake buildRun",
+    "catch": "target(",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e \"xmake build ; xmake run\""
+    ],
+    "description": "alacritty and xmake build"
+  },
+  "alacritty helix": {
+    "title": "alacritty helix open file",
+    "catch": "file:///",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e hx ${TM_SELECTED_TEXT}"
+    ],
+    "description": "alacritty and open helix"
+  },
+  "alacritty clang": {
+    "title": "alacritty clang build",
+    "catch": "main",
+    "shell": [
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e clang ${TM_FILENAME} -o ${TM_FILENAME_BASE}",
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e ./${TM_FILENAME_BASE}"
+    ],
+    "description": "alacritty and clang build"
+  }
+}

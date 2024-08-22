@@ -1,0 +1,19 @@
+{
+  "tmux split window": {
+    "title": "tmux split window",
+    "catch": "fn test_",
+    "shell": [
+      "tmux split-window -h",
+      "tmux send in helix"
+    ],
+    "description": "tmux split and open helix"
+  },
+  "alacritty window helix": {
+    "title": "alacritty window",
+    "catch": "fn test_",
+    "shell": [
+      "alacritty -e hx ${TM_FILEPATH}"
+    ],
+    "description": "alacritty and open helix"
+  }
+}

@@ -1,0 +1,383 @@
+# Linuxing helix config
+theme = "tokyonight_day"
+
+[editor]
+# 真彩支持
+true-color = true
+# bufferline = "always"
+cursorline = true
+cursorcolumn = false
+
+# 光标样式
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+# 状态栏定义
+[editor.statusline]
+left = ["mode", "spacer", "spinner", "spacer", "file-name", "file-modification-indicator"]
+center = ["diagnostics","workspace-diagnostics"]
+right = [ "selections", "position", "position-percentage", "file-encoding", "file-line-ending", "file-type", ]
+
+[editor.soft-wrap]
+enable = true
+max-wrap = 25 # increase value to reduce forced mid-word  wrapping
+max-indent-retain = 0
+wrap-indicator = ""  # set wrap-indicator to "" to hide it
+
+[editor.indent-guides]
+render = true
+character = "┊" # Some characters that work well: "▏", "┆", "┊", "⸽"
+skip-levels = 1
+
+[editor.whitespace.render]
+space = "all"
+tab = "all"
+newline = "none"
+
+[editor.whitespace.characters]
+space = " "
+nbsp = "⍽"
+tab = "→"
+newline = "⏎"
+tabpad = "·" # Tabs will look like "→···" (depending on tab width)[]
+
+[editor.lsp]
+display-messages = true
+display-inlay-hints = true
+
+# https://docs.helix-editor.com/keymap.html
+[keys.normal.space]
+# command mode
+space = "command_mode"
+"." = "command_mode"
+
+# lazy config
+l = { r = ":config-reload", o = ":config-open", w = ":config-open-workspace", c = ":pipe-to alacritty -e chezmoi edit --apply",  v = ":open C:/Users/Administrator/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json" }
+
+# file
+f = { f = "file_picker_in_current_directory",  "." = "file_picker", "s" = "symbol_picker"}
+# buffer
+b = { b = "buffer_picker" , n = ":new", v = ":vnew", h = ":hnew", c = ":wbc!", o = ":bco!" }
+# lsp functions
+c = { a = "code_action", r = "rename_symbol", f = ":format" }
+
+# new scratch buffer
+tab = ":vnew"
+# new buffer
+n = ":new"
+# write buffer
+s = ":wa!"
+# close buffer
+q = ":wbc!"
+# close all
+z = ":xa!"
+
+# theme
+t = { a = ":theme ayu_light", b = ":theme ayu_dark", c = ":theme github_light", d = ":theme github_dark", o = ":theme onedark", p = ":theme onelight", t = ":theme tokyonight", n = ":theme nord" }
+
+[keys.normal]
+# just commands
+F1 = ":format"
+F2 = "rename_symbol"
+F5 = ":sh just build"
+F6 = ":sh just run"
+
+# debug
+F7 = "dap_launch"
+F8 = "dap_continue"
+F9 = "dap_step_in"
+F10 = "dap_step_out"
+F11 = "goto_definition"
+F12 = "goto_implementation"
+
+# multi selection
+C-n = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+
+# line start and end
+"$" = ["split_selection_on_newline", "insert_at_line_end", "normal_mode"]
+"0" = ["split_selection_on_newline", "insert_at_line_start", "normal_mode"]
+
+# extend_line_below and up
+"S-A-up" = ["move_visual_line_up", "extend_line_below", "delete_selection", "paste_after", "collapse_selection", "move_visual_line_up"]
+"S-A-down" = ["extend_line_below", "delete_selection", "paste_after", "collapse_selection"]
+
+# duplicate
+"C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
+ 
+# delete line
+U = "kill_to_line_start"
+D = "kill_to_line_end"
+
+# comments
+"C-/" = "toggle_comments"
+
+# indent
+"C-]" = "indent"
+"C-[" = "unindent"
+
+# buffer
+"C-c" = ":new"
+"C-q" = ":wbc!"
+H = ":bp"
+L = ":bn"
+
+# End of file
+G = "goto_last_line"
+
+[keys.normal.g]
+c = { c = "toggle_comments" }
+
+[keys.normal."\\"]
+"\\" = ":pipe-to alacritty -e hx"
+
+[keys.normal."tab"]
+e = ":pipe-to alacritty -e broot"
+w = ":pipe-to wezterm"
+a = ":pipe-to alacritty"
+c = ":pipe-to code"
+m = ":pipe-to alacritty -e nvim"
+n = ":pipe-to nvim"
+"j" = ":open justfile"
+"1" = ":cd ~/.local/share/chezmoi"
+"2" = ":cd ~/source/repositories/efwmcwalnut"
+"3" = ":cd ~/source/repositories/Walnut"
+"4" = ":cd ~/source/repositories/mach-core"
+"5" = ":cd ~/source/repositories/rust-raytracer/raytracer"
+"6" = ":cd ~/source/repositories/Raytracing"
+"7" = ":cd ~/OneDrive/org"
+"8" = ":cd D:/workspace"
+
+[keys.normal."+"]
+a = ":sh cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=1"
+b = ":sh cmake --build build"
+m = ":sh xmake"
+r = ":sh xmake run"
+s = ":sh xmake project -k compile_commands"
+c = ":sh cargo build"
+g = ":sh cargo run"
+t = ":sh cargo test"
+p = ":sh pixi run start"
+u = ":sh java -jar C:/Users/Administrator/.dotfiles/tools/plantuml.jar -tsvg *.puml"
+
+[keys.insert.j]
+j = ["normal_mode", ":write!"]
+
+[keys.insert]
+"C-/" = "toggle_comments"
+
+"C-]" = "indent"
+"C-[" = "unindent"
+
+"C-a" = "insert_at_line_start"
+"C-e" = "insert_at_line_end"
+
+"C-right" = "move_next_word_start"
+"C-left" = "move_prev_word_start"
+"C-down" = "move_visual_line_down"
+"C-up" = "move_visual_line_up"
+
+# multi selection
+C-n = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+
+# extend_line_below and up
+"S-A-up" = ["move_visual_line_up", "extend_line_below", "delete_selection", "paste_after", "collapse_selection", "move_visual_line_up"]
+"S-A-down" = ["extend_line_below", "delete_selection", "paste_after", "collapse_selection"]
+
+# duplicate
+"C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
+
+# up = "no_op"
+# down = "no_op"
+# left = "no_op"
+# right = "no_op"
+# pageup = "no_op"
+# pagedown = "no_op"
+# home = "no_op"
+# end = "no_op"
+
+[keys.select]
+q = "exit_select_mode"
+f = ":pipe-to alacritty -e hx"
+g = ":pipe-to alacritty -e lazygit"
+t = ":pipe-to alacritty -e 'chezmoi apply'"
+
+j = ["copy_selection_on_next_line"]
+k = ["copy_selection_on_prev_line"]
+
+C-n = ["search_next"]
+
+s = "select_regex"
+S = "split_selection"
+"A-s" = "split_selection_on_newline"
+
+"A-minus" = "merge_selections"
+"A-_" = "merge_consecutive_selections"
+
+"&" = "align_selections"
+
+"_" = "trim_selections"
+
+";" = "collapse_selection"
+
+"A-;" = "flip_selections"
+
+"A-:" = "ensure_selections_forward"
+
+","= "keep_primary_selection"
+"A-," = "remove_primary_selection"
+
+C = "copy_selection_on_next_line"
+"A-C" = "copy_selection_on_prev_line"
+
+"(" = "rotate_selections_backward"
+")" = "rotate_selections_forward"
+"A-(" = "rotate_selection_contents_backward"
+"A-)" = "rotate_selection_contents_forward"
+
+"%" = "select_all"
+
+x = "extend_line_below"
+X = "extend_to_line_bounds"
+"A-x" = "shrink_to_line_bounds"
+
+J = "join_selections"
+"A-J" = "join_selections_space"
+
+K = "keep_selections"
+"A-K" = "remove_selections"
+
+"C-/" = "toggle_comments"
+
+# markdown edit shortcut
+[keys.insert."C-m"]
+"C-1" = [
+  ":insert-output echo # ",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+"C-2" = [
+  ":insert-output echo ## ",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+"C-3" = [
+  ":insert-output echo ### ",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+"]" = [
+  "extend_line_below",
+  ":pipe sd # ##",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+"[" = [
+  "extend_line_below",
+  ":pipe sd ## #",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+c = [
+  ":insert-output echo ```",
+  ":insert-output echo ```",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+i = [
+  "collapse_selection",
+  ":insert-output echo **",
+  "flip_selections",
+  "move_char_right",
+  "insert_mode",
+]
+b = [
+  "collapse_selection",
+  ":insert-output echo ****",
+  "flip_selections",
+  "move_char_right",
+  "move_char_right",
+  "collapse_selection",
+  "insert_mode",
+]
+s = [
+  "collapse_selection",
+  ":insert-output echo ~~~~",
+  "flip_selections",
+  "move_char_right",
+  "move_char_right",
+  "collapse_selection",
+  "insert_mode",
+]
+k = [
+  "collapse_selection",
+  ":insert-output echo '<kbd></kbd>'",
+  "flip_selections",
+  "move_char_right",
+  "move_char_right",
+  "move_char_right",
+  "move_char_right",
+  "move_char_right",
+  "collapse_selection",
+  "insert_mode",
+]
+"`" = [
+  "collapse_selection",
+  ":insert-output echo ``",
+  "flip_selections",
+  "move_char_right",
+  "insert_mode",
+]
+h = [
+  "collapse_selection",
+  ":insert-output echo []()",
+  "flip_selections",
+  "move_char_right",
+  "insert_mode",
+]
+l = [
+  "collapse_selection",
+  ":insert-output echo [[]]",
+  "flip_selections",
+  "move_char_right",
+  "move_char_right",
+  "collapse_selection",
+  "completion",
+  "insert_mode",
+]
+j = [
+  "collapse_selection",
+  ":insert-output echo ![](/images/)",
+  "flip_selections",
+  "collapse_selection",
+  "move_char_right",
+  "move_char_right",
+  "collapse_selection",
+  "insert_mode",
+]
+o = [
+  "goto_first_nonwhitespace",
+  ":insert-output echo 1. ",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+q = [
+  "goto_first_nonwhitespace",
+  ":insert-output echo > ",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+u = [
+  "goto_first_nonwhitespace",
+  ":insert-output echo - ",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+t = [
+  "goto_first_nonwhitespace",
+  ":insert-output echo - [ ] ",
+  "collapse_selection",
+  "insert_at_line_end",
+]
+
