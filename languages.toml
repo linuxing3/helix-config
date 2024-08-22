@@ -360,6 +360,7 @@ auto-format = true
 [[language]]
 name = "lua"
 indent = { tab-width = 4, unit = "    " }
+formatter = { command = "stylua", args = [] }
 
 [language-server.lua-language-server]
 args = ["--locale", "zh-cn"]
@@ -448,8 +449,8 @@ name = "markdown"
 formatter = { command = "prettier", args = ["--parser", "markdown"] }
 language-servers = ["marksman", "markdown-oxide", "hx-lsp", "typos-lsp"]
 # 设定 zen-mode-like
-# text-width = 80
-# soft-wrap = { enable = true, wrap-at-text-width = true }
+text-width = 80
+soft-wrap = { enable = true, wrap-at-text-width = true }
 
 # ---- latex ----
 [[language]]
