@@ -1,5 +1,5 @@
 # Linuxing helix config
-theme = "tokyonight_day"
+theme = "tokyonight"
 
 [editor]
 # 真彩支持
@@ -143,7 +143,7 @@ n = ":pipe-to nvim"
 "1" = ":cd ~/.local/share/chezmoi"
 "2" = ":cd ~/source/repositories/efwmcwalnut"
 "3" = ":cd ~/source/repositories/Walnut"
-"4" = ":cd ~/source/repositories/mach-core"
+"4" = ":cd ~/source/repositories/vulkan-guide"
 "5" = ":cd ~/source/repositories/rust-raytracer/raytracer"
 "6" = ":cd ~/source/repositories/Raytracing"
 "7" = ":cd ~/OneDrive/org"
