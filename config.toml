@@ -165,6 +165,8 @@ z = ":xa!"
 f = "file_picker_in_current_directory"
 "." = "file_picker"
 "s" = "symbol_picker"
+# Use fzf to pick files
+"z" = ":sh fzf --preview 'bat --style=numbers --color=always --line-range :500 {}' | xargs -r $EDITOR"
 
 [keys.normal.space.b]
 # buffer
@@ -246,6 +248,9 @@ t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 # Send to panes by position
 "l" = ":pipe-to zqantara --pane --pos 'down right'"
 "h" = ":pipe-to zqantara --pane --pos 'down left'"
+
+# Use rg to search for keywords, then fzf to select, and open at the found position
+"g" = ":sh rg --line-number --color=never --smart-case \"\" | fzf --delimiter : --preview 'bat --style=numbers --color=always --highlight-line {2} {1}' | awk -F: '{print \"+\"$2\" \"$1}' | xargs -r hx"
 
 [keys.select.space.space]
 # Send to named tabs
