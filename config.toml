@@ -1,10 +1,10 @@
 # Linuxing helix config
-theme = "tokyonight"
+theme = "base16_transparent"
 
 [editor]
 # 真彩支持
 true-color = true
-# bufferline = "always"
+bufferline = "always"
 cursorline = true
 cursorcolumn = false
 
@@ -48,40 +48,16 @@ display-messages = true
 display-inlay-hints = true
 
 # https://docs.helix-editor.com/keymap.html
-[keys.normal.space]
-# command mode
-space = "command_mode"
-"." = "command_mode"
+[keys.insert.j]
+j = ["normal_mode", ":write!"]
 
-# lazy config
-l = { r = ":config-reload", o = ":config-open", w = ":config-open-workspace", c = ":pipe-to alacritty -e chezmoi edit --apply",  v = ":open C:/Users/Administrator/AppData/Local/Packages/Microsoft.WindowsTerminal_8wekyb3d8bbwe/LocalState/settings.json" }
-
-# file
-f = { f = "file_picker_in_current_directory",  "." = "file_picker", "s" = "symbol_picker"}
-# buffer
-b = { b = "buffer_picker" , n = ":new", v = ":vnew", h = ":hnew", c = ":wbc!", o = ":bco!" }
-# lsp functions
-c = { a = "code_action", r = "rename_symbol", f = ":format" }
-
-# new scratch buffer
-tab = ":vnew"
-# new buffer
-n = ":new"
-# write buffer
-s = ":wa!"
-# close buffer
-q = ":wbc!"
-# close all
-z = ":xa!"
-
-# theme
-t = { a = ":theme ayu_light", b = ":theme ayu_dark", c = ":theme github_light", d = ":theme github_dark", o = ":theme onedark", p = ":theme onelight", t = ":theme tokyonight", n = ":theme nord" }
-
-[keys.normal]
+[keys.insert]
 # just commands
 F1 = ":format"
 F2 = "rename_symbol"
-F5 = ":sh just build"
+F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
+F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
+F5 = ":sh doom +org tangle --all %{buffer_name}"
 F6 = ":sh just run"
 
 # debug
@@ -92,8 +68,45 @@ F10 = "dap_step_out"
 F11 = "goto_definition"
 F12 = "goto_implementation"
 
+"C-/" = "toggle_comments"
+
+"C-]" = "indent"
+"C-[" = "unindent"
+
+"C-a" = "insert_at_line_start"
+"C-e" = "insert_at_line_end"
+
+"C-l" = "move_next_word_end"
+"C-h" = "move_prev_word_start"
+
 # multi selection
-C-n = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+
+# extend_line_below and up
+"S-A-up" = ["move_visual_line_up", "extend_line_below", "delete_selection", "paste_after", "collapse_selection", "move_visual_line_up"]
+"S-A-down" = ["extend_line_below", "delete_selection", "paste_after", "collapse_selection"]
+
+# duplicate
+"C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
+
+[keys.normal]
+# just commands
+F1 = ":format"
+F2 = "rename_symbol"
+F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
+F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
+F5 = ":sh doom +org tangle --all %{buffer_name}"
+
+# debug
+F7 = "dap_launch"
+F8 = "dap_continue"
+F9 = "dap_step_in"
+F10 = "dap_step_out"
+F11 = "goto_definition"
+F12 = "goto_implementation"
+
+# multi selection
+C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
 
 # line start and end
 "$" = ["split_selection_on_newline", "insert_at_line_end", "normal_mode"]
@@ -126,258 +139,126 @@ L = ":bn"
 # End of file
 G = "goto_last_line"
 
+# close all
+Z = ":xa!"
+
+# write buffer
+s = ":wa!"
+
+[keys.normal.space]
+# command mode
+space = "command_mode"
+
+# new scratch buffer
+v = ":vnew"
+# new buffer
+n = ":new"
+# close buffer
+q = ":bc!"
+# write buffer
+s = ":wa!"
+# close all
+z = ":xa!"
+
+[keys.normal.space.f]
+# file
+f = "file_picker_in_current_directory"
+"." = "file_picker"
+"s" = "symbol_picker"
+
+[keys.normal.space.b]
+# buffer
+b = "buffer_picker"
+n = ":new"
+v = ":vnew"
+h = ":hnew"
+c = ":wbc!"
+o = ":bco!" 
+
+[keys.normal.space.c]
+# lsp functions
+a = "code_action"
+r = "rename_symbol"
+f = ":format" 
+
+[keys.normal.space.t]
+# theme
+a = ":theme ayu_light"
+b = ":theme ayu_dark"
+c = ":theme github_light"
+d = ":theme github_dark"
+o = ":theme onedark"
+p = ":theme onelight"
+t = ":theme tokyonight"
+n = ":theme nord" 
+
 [keys.normal.g]
-c = { c = "toggle_comments" }
+c = "toggle_comments"
+R = ":reload"
 
 [keys.normal."\\"]
-"\\" = ":pipe-to alacritty -e hx"
+# lazy config
+"[" = ":config-open"
+"]" = ":config-reload"
+"=" = ":config-open-workspace"
+"`" = ":cd ~/"
+"1" = ":cd ~/.config/home-manager"
+"2" = ":cd ~/.config/nnn/plugins"
+"3" = ":cd ~/.local/bin"
 
 [keys.normal."tab"]
-e = ":pipe-to alacritty -e broot"
-w = ":pipe-to wezterm"
-a = ":pipe-to alacritty"
-c = ":pipe-to code"
-m = ":pipe-to alacritty -e nvim"
-n = ":pipe-to nvim"
-"j" = ":open justfile"
-"1" = ":cd ~/.local/share/chezmoi"
-"2" = ":cd ~/source/repositories/efwmcwalnut"
-"3" = ":cd ~/source/repositories/Walnut"
-"4" = ":cd ~/source/repositories/vulkan-guide"
-"5" = ":cd ~/source/repositories/rust-raytracer/raytracer"
-"6" = ":cd ~/source/repositories/Raytracing"
-"7" = ":cd ~/OneDrive/org"
-"8" = ":cd D:/workspace"
+tab = ":sh zqantara --final-return 0.1 --tab --name hx --program 'hx %{buffer_name}'"
+n = ":pipe-to kitty -e nu"
+a = ":pipe-to kitty -e nnn"
+h = ":sh zqantara --pane --pos down --program 'home-manager switch --flake /home/efwmc/.config/home-manager -b bak'"
+s = ":sh zqantara --pane --pos down --program 'sudo nixos-rebuild switch --flake /home/efwmc/.config/home-manager'"
 
-[keys.normal."+"]
-a = ":sh cmake -B build -S . -DCMAKE_EXPORT_COMPILE_COMMANDS=1"
-b = ":sh cmake --build build"
-m = ":sh xmake"
-r = ":sh xmake run"
-s = ":sh xmake project -k compile_commands"
-c = ":sh cargo build"
-g = ":sh cargo run"
-t = ":sh cargo test"
-p = ":sh pixi run start"
-u = ":sh java -jar C:/Users/Administrator/.dotfiles/tools/plantuml.jar -tsvg *.puml"
+# Open in tabs
+[keys.normal.space.o]
+g = ":sh zqantara --final-return 0.1 --tab --name lazygit --program lazygit"
+p = ":sh zqantara --final-return 0.1 --tab --name ipython --program 'uv run ipython'"
+a = ":sh zqantara --final-return 0.1 --tab --name aider --program aider"
 
-[keys.insert.j]
-j = ["normal_mode", ":write!"]
+# Open in floating windows
+[keys.normal.space.o.f]
+p = ":sh zqantara --floating --program 'uv run ipython'"
+t = ":sh zqantara --floating --program zsh"
+c = ":sh zqantara --floating --program aider"
 
-[keys.insert]
-"C-/" = "toggle_comments"
+# Open in panes (embedded windows)
+[keys.normal.space.o.w]
+p = ":sh zqantara --pane --pos down --program ipython"
+t = ":sh zqantara --pane --pos right --program zsh"
+c = ":sh zqantara --pane --pos stacked --program aider"
 
-"C-]" = "indent"
-"C-[" = "unindent"
+[keys.normal.space."r"]
+# Send to named tabs
+p = ":pipe-to zqantara --final-return 0.1 --tab --name ipython"
+c = ":pipe-to zqantara --final-return 0.1 --tab --name aider"
+t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 
-"C-a" = "insert_at_line_start"
-"C-e" = "insert_at_line_end"
+# Send to floating windows by position
+# 'current' means use current floating window without switching position
+"1" = ":pipe-to zqantara --floating --pos current"
+"2" = ":pipe-to zqantara --floating --pos up"
+"3" = ":pipe-to zqantara --floating --pos down"
 
-"C-right" = "move_next_word_start"
-"C-left" = "move_prev_word_start"
-"C-down" = "move_visual_line_down"
-"C-up" = "move_visual_line_up"
+# Send to panes by position
+"l" = ":pipe-to zqantara --pane --pos 'down right'"
+"h" = ":pipe-to zqantara --pane --pos 'down left'"
 
-# multi selection
-C-n = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+[keys.select.space.space]
+# Send to named tabs
+p = ":pipe-to zqantara --tab --name ipython"
+c = ":pipe-to zqantara --final-return 0.1 --tab --name aider"
+t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 
-# extend_line_below and up
-"S-A-up" = ["move_visual_line_up", "extend_line_below", "delete_selection", "paste_after", "collapse_selection", "move_visual_line_up"]
-"S-A-down" = ["extend_line_below", "delete_selection", "paste_after", "collapse_selection"]
+# Send to floating windows by position
+# 'current' means use current floating window without switching position
+"1" = ":pipe-to zqantara --floating --pos current"
+"2" = ":pipe-to zqantara --floating --pos up"
+"3" = ":pipe-to zqantara --floating --pos down"
 
-# duplicate
-"C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
-
-# up = "no_op"
-# down = "no_op"
-# left = "no_op"
-# right = "no_op"
-# pageup = "no_op"
-# pagedown = "no_op"
-# home = "no_op"
-# end = "no_op"
-
-[keys.select]
-q = "exit_select_mode"
-f = ":pipe-to alacritty -e hx"
-g = ":pipe-to alacritty -e lazygit"
-t = ":pipe-to alacritty -e 'chezmoi apply'"
-
-j = ["copy_selection_on_next_line"]
-k = ["copy_selection_on_prev_line"]
-
-C-n = ["search_next"]
-
-s = "select_regex"
-S = "split_selection"
-"A-s" = "split_selection_on_newline"
-
-"A-minus" = "merge_selections"
-"A-_" = "merge_consecutive_selections"
-
-"&" = "align_selections"
-
-"_" = "trim_selections"
-
-";" = "collapse_selection"
-
-"A-;" = "flip_selections"
-
-"A-:" = "ensure_selections_forward"
-
-","= "keep_primary_selection"
-"A-," = "remove_primary_selection"
-
-C = "copy_selection_on_next_line"
-"A-C" = "copy_selection_on_prev_line"
-
-"(" = "rotate_selections_backward"
-")" = "rotate_selections_forward"
-"A-(" = "rotate_selection_contents_backward"
-"A-)" = "rotate_selection_contents_forward"
-
-"%" = "select_all"
-
-x = "extend_line_below"
-X = "extend_to_line_bounds"
-"A-x" = "shrink_to_line_bounds"
-
-J = "join_selections"
-"A-J" = "join_selections_space"
-
-K = "keep_selections"
-"A-K" = "remove_selections"
-
-"C-/" = "toggle_comments"
-
-# markdown edit shortcut
-[keys.insert."C-m"]
-"C-1" = [
-  ":insert-output echo # ",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-"C-2" = [
-  ":insert-output echo ## ",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-"C-3" = [
-  ":insert-output echo ### ",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-"]" = [
-  "extend_line_below",
-  ":pipe sd # ##",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-"[" = [
-  "extend_line_below",
-  ":pipe sd ## #",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-c = [
-  ":insert-output echo ```",
-  ":insert-output echo ```",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-i = [
-  "collapse_selection",
-  ":insert-output echo **",
-  "flip_selections",
-  "move_char_right",
-  "insert_mode",
-]
-b = [
-  "collapse_selection",
-  ":insert-output echo ****",
-  "flip_selections",
-  "move_char_right",
-  "move_char_right",
-  "collapse_selection",
-  "insert_mode",
-]
-s = [
-  "collapse_selection",
-  ":insert-output echo ~~~~",
-  "flip_selections",
-  "move_char_right",
-  "move_char_right",
-  "collapse_selection",
-  "insert_mode",
-]
-k = [
-  "collapse_selection",
-  ":insert-output echo '<kbd></kbd>'",
-  "flip_selections",
-  "move_char_right",
-  "move_char_right",
-  "move_char_right",
-  "move_char_right",
-  "move_char_right",
-  "collapse_selection",
-  "insert_mode",
-]
-"`" = [
-  "collapse_selection",
-  ":insert-output echo ``",
-  "flip_selections",
-  "move_char_right",
-  "insert_mode",
-]
-h = [
-  "collapse_selection",
-  ":insert-output echo []()",
-  "flip_selections",
-  "move_char_right",
-  "insert_mode",
-]
-l = [
-  "collapse_selection",
-  ":insert-output echo [[]]",
-  "flip_selections",
-  "move_char_right",
-  "move_char_right",
-  "collapse_selection",
-  "completion",
-  "insert_mode",
-]
-j = [
-  "collapse_selection",
-  ":insert-output echo ![](/images/)",
-  "flip_selections",
-  "collapse_selection",
-  "move_char_right",
-  "move_char_right",
-  "collapse_selection",
-  "insert_mode",
-]
-o = [
-  "goto_first_nonwhitespace",
-  ":insert-output echo 1. ",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-q = [
-  "goto_first_nonwhitespace",
-  ":insert-output echo > ",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-u = [
-  "goto_first_nonwhitespace",
-  ":insert-output echo - ",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-t = [
-  "goto_first_nonwhitespace",
-  ":insert-output echo - [ ] ",
-  "collapse_selection",
-  "insert_at_line_end",
-]
-
+# Send to panes by position
+"l" = ":pipe-to zqantara --pane --pos 'down right'"
+"h" = ":pipe-to zqantara --pane --pos 'down left'"
