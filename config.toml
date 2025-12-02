@@ -182,6 +182,8 @@ Z = ":toggle soft-wrap.enable"
 "f" = ":pipe-to zellij run -c -f --x 10%% --y 10%% --width 80%% --height 80%% --name emacsclient -- emacsclient '%{buffer_name}'"
 # open yazi finder
 "e" = ":sh txde filetree '%{buffer_name}'"
+# open nnn finder
+n = ":sh txde nnn"
 # git blame file
 "b" = ":sh txde blame '%{buffer_name}' %{cursor_line}"
 # Running rest request
@@ -197,6 +199,9 @@ Z = ":toggle soft-wrap.enable"
 
 [keys.normal.space.f]
 # file
+# open yazi finder
+"e" = ":sh txde filetree '%{buffer_name}'"
+# open nnn finder
 n = ":sh txde nnn"
 "." = "file_picker_in_current_directory"
 f = "file_picker"
