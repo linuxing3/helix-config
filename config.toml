@@ -55,8 +55,12 @@ j = ["normal_mode", ":write!"]
 # just commands
 F1 = ":format"
 F2 = "rename_symbol"
-F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
-F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
+# run lazygit
+F3 = ":sh txde git '%{buffer_name}'"
+# F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
+# open yazi finder
+F4 = ":sh txde filetree '%{buffer_name}'"
+# F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
 F5 = ":sh doom +org tangle --all %{buffer_name}"
 F6 = ":sh just run"
 
@@ -93,8 +97,12 @@ C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select
 # just commands
 F1 = ":format"
 F2 = "rename_symbol"
-F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
-F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
+# run lazygit
+F3 = ":sh txde git '%{buffer_name}'"
+# F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
+# open yazi finder
+F4 = ":sh txde filetree '%{buffer_name}'"
+# F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
 F5 = ":sh doom +org tangle --all %{buffer_name}"
 
 # debug
@@ -145,10 +153,12 @@ Z = ":xa!"
 # write buffer
 s = ":wa!"
 
+
 [keys.normal.space]
 # command mode
 space = "command_mode"
-
+# files in current directory
+"." = "file_picker_in_current_directory"
 # new scratch buffer
 v = ":vnew"
 # new buffer
@@ -159,14 +169,39 @@ q = ":bc!"
 s = ":wa!"
 # close all
 z = ":xa!"
+# soft wrap
+Z = ":toggle soft-wrap.enable"
+
+[keys.normal.space.e]
+# txde
+# Open with emacsclient in a terminal
+"a" = ":sh st -e emacsclient '%{buffer_name}'"
+# Open with emacsclient in a zellij overlay pane
+"w" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name emacsclient -- emacsclient '%{buffer_name}'"
+# Open with emacsclient in a zellij floating pane
+"f" = ":pipe-to zellij run -c -f --x 10%% --y 10%% --width 80%% --height 80%% --name emacsclient -- emacsclient '%{buffer_name}'"
+# open yazi finder
+"e" = ":sh txde filetree '%{buffer_name}'"
+# git blame file
+"b" = ":sh txde blame '%{buffer_name}' %{cursor_line}"
+# Running rest request
+"r" = ":sh txde REST"
+# find and replace in place
+"/" = ":sh txde find-and-replace '%{buffer_name}'"
+# run lazygit
+"g" = ":sh txde git '%{buffer_name}'"
+# run sql
+"s" = ":sh txde sql"
+# start terminal
+"t" = ":sh txde terminal"
 
 [keys.normal.space.f]
 # file
-f = "file_picker_in_current_directory"
-"." = "file_picker"
+n = ":sh txde nnn"
+"." = "file_picker_in_current_directory"
+f = "file_picker"
 "s" = "symbol_picker"
-# Use fzf to pick files
-"z" = ":sh fzf --preview 'bat --style=numbers --color=always --line-range :500 {}' | xargs -r $EDITOR"
+"g" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name hx -- rg_hx"
 
 [keys.normal.space.b]
 # buffer
@@ -182,6 +217,7 @@ o = ":bco!"
 a = "code_action"
 r = "rename_symbol"
 f = ":format" 
+i = ":toggle lsp.display-inlay-hints"
 
 [keys.normal.space.t]
 # theme
@@ -198,28 +234,35 @@ n = ":theme nord"
 c = "toggle_comments"
 R = ":reload"
 
+[keys.normal."]"]
+"]" = ":bn"
+[keys.normal."["]
+"[" = ":bp"
+
 [keys.normal."\\"]
 # lazy config
 "[" = ":config-open"
 "]" = ":config-reload"
 "=" = ":config-open-workspace"
-"`" = ":cd ~/"
+"\\" = ":cd ~/"
 "1" = ":cd ~/.config/home-manager"
-"2" = ":cd ~/.config/nnn/plugins"
-"3" = ":cd ~/.local/bin"
+"2" = ":cd ~/.config/helix"
+"3" = ":cd ~/.config/zellij"
 
 [keys.normal."tab"]
-tab = ":sh zqantara --final-return 0.1 --tab --name hx --program 'hx %{buffer_name}'"
-n = ":pipe-to kitty -e nu"
-a = ":pipe-to kitty -e nnn"
-h = ":sh zqantara --pane --pos down --program 'home-manager switch --flake /home/efwmc/.config/home-manager -b bak'"
-s = ":sh zqantara --pane --pos down --program 'sudo nixos-rebuild switch --flake /home/efwmc/.config/home-manager'"
+tab = ":sh zqantara --final-return 0.1 --tab --name hx --program 'zsh'"
+e = ":sh zqantara --final-return 0.1 --tab --name hx --program 'hx %{buffer_name}'"
+n = ":pipe-to st -e nu"
+a = ":pipe-to st -e nnn"
+h = ":sh zqantara --pane --pos down --program 'home-manager switch --flake /home/Designers/.config/home-manager -b b'"
+s = ":sh zqantara --pane --pos down --program 'sudo nixos-rebuild switch --flake /home/Designers/.config/home-manager'"
 
 # Open in tabs
 [keys.normal.space.o]
 g = ":sh zqantara --final-return 0.1 --tab --name lazygit --program lazygit"
 p = ":sh zqantara --final-return 0.1 --tab --name ipython --program 'uv run ipython'"
 a = ":sh zqantara --final-return 0.1 --tab --name aider --program aider"
+t = ":sh zqantara --final-return 0.1 --tab --name shell --program zsh"
 
 # Open in floating windows
 [keys.normal.space.o.f]
@@ -229,14 +272,15 @@ c = ":sh zqantara --floating --program aider"
 
 # Open in panes (embedded windows)
 [keys.normal.space.o.w]
+t = ":sh zqantara --pane --pos down --program zsh"
+r = ":sh zqantara --pane --pos right --program zsh"
 p = ":sh zqantara --pane --pos down --program ipython"
-t = ":sh zqantara --pane --pos right --program zsh"
-c = ":sh zqantara --pane --pos stacked --program aider"
+a = ":sh zqantara --pane --pos stacked --program aider"
 
-[keys.normal.space."r"]
+[keys.normal.space.r]
 # Send to named tabs
 p = ":pipe-to zqantara --final-return 0.1 --tab --name ipython"
-c = ":pipe-to zqantara --final-return 0.1 --tab --name aider"
+a = ":pipe-to zqantara --final-return 0.1 --tab --name aider"
 t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 
 # Send to floating windows by position
@@ -249,14 +293,11 @@ t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 "l" = ":pipe-to zqantara --pane --pos 'down right'"
 "h" = ":pipe-to zqantara --pane --pos 'down left'"
 
-# Use rg to search for keywords, then fzf to select, and open at the found position
-"g" = ":sh rg --line-number --color=never --smart-case \"\" | fzf --delimiter : --preview 'bat --style=numbers --color=always --highlight-line {2} {1}' | awk -F: '{print \"+\"$2\" \"$1}' | xargs -r hx"
-
-[keys.select.space.space]
+[keys.select.space.r]
 # Send to named tabs
 p = ":pipe-to zqantara --tab --name ipython"
-c = ":pipe-to zqantara --final-return 0.1 --tab --name aider"
-t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
+a = ":pipe-to zqantara --final-return 0.1 --tab --name aider"
+s = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 
 # Send to floating windows by position
 # 'current' means use current floating window without switching position
