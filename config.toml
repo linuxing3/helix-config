@@ -186,10 +186,8 @@ Z = ":toggle soft-wrap.enable"
 f = "file_picker"
 "s" = "symbol_picker"
 # open yazi finder
-# "e" = ":sh txde filetree '%{buffer_name}'"
 y = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/yazi.nu"
 # open nnn finder
-# n = ":sh txde nnn"
 n = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/nnn.nu"
 # terminal
 t = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/terminal.nu"
@@ -199,6 +197,8 @@ t = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELL
 [keys.normal.space.l]
 a = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/ai.nu"
 h = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/home-manager.nu"
+m = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/makefile.nu"
+j = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/justfile.nu"
 
 [keys.normal.space.b]
 # buffer
@@ -256,12 +256,14 @@ d = ":bc"
 "0" = ":cd /share/sources/doxx"
 
 [keys.normal."tab"]
-tab = ":sh zqantara --final-return 0.1 --tab --name shell --program 'zsh'"
-e = ":sh zqantara --final-return 0.1 --tab --name hx --program 'hx %{buffer_name}'"
-n = ":pipe-to st -e nu"
-a = ":pipe-to st -e nnn"
-h = ":sh zqantara --pane --pos down --program 'home-manager switch --flake /home/Designers/.config/home-manager -b b'"
-s = ":sh zqantara --pane --pos down --program 'sudo nixos-rebuild switch --flake /home/Designers/.config/home-manager'"
+tab = ":sh zellij action new-tab"
+e = ":sh zellij run -c -- 'hx'"
+f = ":sh zellij run -c -- 'nnn'"
+y = ":sh zellij run -c -- 'yazi'"
+s = ":pipe-to st -e nu"
+n = ":pipe-to st -e nnn"
+h = ":sh zellij run -d down -- 'home-manager switch --flake /home/Designers/.config/home-manager -b b'"
+o = ":sh zellij run -d down 'sudo nixos-rebuild switch --flake /home/Designers/.config/home-manager'"
 
 # Open in tabs
 [keys.normal.space.o]
