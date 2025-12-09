@@ -56,12 +56,12 @@ j = ["normal_mode", ":write!"]
 F1 = ":format"
 F2 = "rename_symbol"
 # run lazygit
-F3 = ":sh txde git '%{buffer_name}'"
-# F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
+F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
 # open yazi finder
-F4 = ":sh txde filetree '%{buffer_name}'"
-# F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
+F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
+# tangle current file 
 F5 = ":sh doom +org tangle --all %{buffer_name}"
+
 F6 = ":sh just run"
 
 # debug
@@ -97,13 +97,12 @@ C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select
 # just commands
 F1 = ":format"
 F2 = "rename_symbol"
-# run lazygit
-F3 = ":sh txde git '%{buffer_name}'"
-# F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
+# lazygit
+F3 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/git.nu"
 # open yazi finder
-F4 = ":sh txde filetree '%{buffer_name}'"
-# F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
-F5 = ":sh doom +org tangle --all %{buffer_name}"
+F4 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/yazi.nu"
+# tangle file
+F5 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/tangle.nu %{buffer_name}"
 
 # debug
 F7 = "dap_launch"
@@ -173,40 +172,33 @@ z = ":xa!"
 Z = ":toggle soft-wrap.enable"
 
 [keys.normal.space.e]
-# txde
 # Open with emacsclient in a terminal
 "a" = ":sh st -e emacsclient '%{buffer_name}'"
 # Open with emacsclient in a zellij overlay pane
 "w" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name emacsclient -- emacsclient '%{buffer_name}'"
 # Open with emacsclient in a zellij floating pane
-"f" = ":pipe-to zellij run -c -f --x 10%% --y 10%% --width 80%% --height 80%% --name emacsclient -- emacsclient '%{buffer_name}'"
-# open yazi finder
-"e" = ":sh txde filetree '%{buffer_name}'"
-# open nnn finder
-n = ":sh txde nnn"
-# git blame file
-"b" = ":sh txde blame '%{buffer_name}' %{cursor_line}"
-# Running rest request
-"r" = ":sh txde REST"
-# find and replace in place
-"/" = ":sh txde find-and-replace '%{buffer_name}'"
-# run lazygit
-"g" = ":sh txde git '%{buffer_name}'"
-# run sql
-"s" = ":sh txde sql"
-# start terminal
-"t" = ":sh txde terminal"
+"f" = ":pipe-to zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% --name emacsclient -- emacsclient '%{buffer_name}'"
 
 [keys.normal.space.f]
 # file
-# open yazi finder
-"e" = ":sh txde filetree '%{buffer_name}'"
-# open nnn finder
-n = ":sh txde nnn"
+# builtin pickers
 "." = "file_picker_in_current_directory"
 f = "file_picker"
 "s" = "symbol_picker"
+# open yazi finder
+# "e" = ":sh txde filetree '%{buffer_name}'"
+y = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/yazi.nu"
+# open nnn finder
+# n = ":sh txde nnn"
+n = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/nnn.nu"
+# terminal
+t = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/terminal.nu"
+# fuzzy finder
 "g" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name hx -- rg_hx"
+
+[keys.normal.space.l]
+a = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/ai.nu"
+h = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/home-manager.nu"
 
 [keys.normal.space.b]
 # buffer
@@ -238,6 +230,8 @@ n = ":theme nord"
 [keys.normal.g]
 c = "toggle_comments"
 R = ":reload"
+t = ":new"
+d = ":bc"
 
 [keys.normal."]"]
 "]" = ":bn"
@@ -246,16 +240,23 @@ R = ":reload"
 
 [keys.normal."\\"]
 # lazy config
+"\\" = ":sh xmodmap /home/Designers/.config/X11/xmodmap"
 "[" = ":config-open"
 "]" = ":config-reload"
 "=" = ":config-open-workspace"
-"\\" = ":cd ~/"
 "1" = ":cd ~/.config/home-manager"
 "2" = ":cd ~/.config/helix"
 "3" = ":cd ~/.config/zellij"
+"4" = ":cd ~/.config/nnn"
+"5" = ":cd ~/.config/neomutt"
+"6" = ":cd ~/.config/zsh"
+"7" = ":cd ~/.config/yazi"
+"8" = ":cd /share/sources/chadwm/chadwm"
+"9" = ":cd /share/sources/st"
+"0" = ":cd /share/sources/doxx"
 
 [keys.normal."tab"]
-tab = ":sh zqantara --final-return 0.1 --tab --name hx --program 'zsh'"
+tab = ":sh zqantara --final-return 0.1 --tab --name shell --program 'zsh'"
 e = ":sh zqantara --final-return 0.1 --tab --name hx --program 'hx %{buffer_name}'"
 n = ":pipe-to st -e nu"
 a = ":pipe-to st -e nnn"
