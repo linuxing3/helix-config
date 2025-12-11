@@ -62,7 +62,7 @@ F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
 # tangle current file 
 F5 = ":sh doom +org tangle --all %{buffer_name}"
 
-F6 = ":sh just run"
+F6 = ":sh st -e just run"
 
 # debug
 F7 = "dap_launch"
@@ -71,6 +71,26 @@ F9 = "dap_step_in"
 F10 = "dap_step_out"
 F11 = "goto_definition"
 F12 = "goto_implementation"
+
+C-esc = [
+  "goto_first_nonwhitespace",
+  "select_mode",
+  "extend_to_line_end",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "collapse_selection",
+  "insert_mode"
+]
+C-space = [
+  "select_mode",
+  "extend_to_line_bounds",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "collapse_selection",
+  "insert_mode"
+]
 
 "C-/" = "toggle_comments"
 
@@ -104,6 +124,8 @@ F4 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZEL
 # tangle file
 F5 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/tangle.nu %{buffer_name}"
 
+F6 = ":sh st -e just run"
+
 # debug
 F7 = "dap_launch"
 F8 = "dap_continue"
@@ -111,6 +133,36 @@ F9 = "dap_step_in"
 F10 = "dap_step_out"
 F11 = "goto_definition"
 F12 = "goto_implementation"
+
+# interact with zellij
+C-h = ":sh zellij ac move-focus-or-tab left"
+C-j = ":sh zellij ac move-focus-or-tab down"
+C-k = ":sh zellij ac move-focus-or-tab up"
+C-l = ":sh zellij ac move-focus-or-tab right"
+
+C-esc = [
+  "goto_first_nonwhitespace",
+  "select_mode",
+  "extend_to_line_end",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode"
+]
+C-space = [
+  "select_mode",
+  "extend_to_line_bounds",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode"
+]
 
 # multi selection
 C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
@@ -153,6 +205,20 @@ Z = ":xa!"
 s = ":wa!"
 
 
+[keys.normal.C-a]
+C-a = ":sh zellij ac toggle-floating-panes"
+h = ":sh zellij ac new-pane -d down"
+n = ":sh zellij ac new-pane"
+r = [
+  ":sh zellij ac new-pane -d right -- nix repl",
+  ":sh zellij ac move-focus left"
+]
+v = ":sh zellij ac new-pane -d right"
+z = ":sh zellij ac toggle-fullscreen"
+
+[keys.normal.C-t]
+n = ":sh zellij ac new-tab"
+
 [keys.normal.space]
 # command mode
 space = "command_mode"
@@ -178,6 +244,8 @@ Z = ":toggle soft-wrap.enable"
 "w" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name emacsclient -- emacsclient '%{buffer_name}'"
 # Open with emacsclient in a zellij floating pane
 "f" = ":pipe-to zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% --name emacsclient -- emacsclient '%{buffer_name}'"
+# Taking note with zk
+y = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/zk.nu"
 
 [keys.normal.space.f]
 # file
@@ -189,16 +257,22 @@ f = "file_picker"
 y = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/yazi.nu"
 # open nnn finder
 n = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/nnn.nu"
+# open project finder
+p = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/project.nu"
 # terminal
 t = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/terminal.nu"
 # fuzzy finder
 "g" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name hx -- rg_hx"
 
 [keys.normal.space.l]
-a = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/ai.nu"
+# floating pane auto close
+a = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/ai.nu"
 h = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/home-manager.nu"
-m = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/makefile.nu"
-j = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/justfile.nu"
+r = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/remap.nu"
+# floating pane not auto close
+m = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/makefile.nu"
+j = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/justfile.nu"
+s = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/sh.nu"
 
 [keys.normal.space.b]
 # buffer
@@ -234,15 +308,12 @@ t = ":new"
 d = ":bc"
 
 [keys.normal."]"]
-"]" = ":bn"
+"]" = ":config-reload"
 [keys.normal."["]
-"[" = ":bp"
+"[" = ":config-open"
 
 [keys.normal."\\"]
 # lazy config
-"\\" = ":sh xmodmap /home/Designers/.config/X11/xmodmap"
-"[" = ":config-open"
-"]" = ":config-reload"
 "=" = ":config-open-workspace"
 "1" = ":cd ~/.config/home-manager"
 "2" = ":cd ~/.config/helix"
@@ -251,9 +322,11 @@ d = ":bc"
 "5" = ":cd ~/.config/neomutt"
 "6" = ":cd ~/.config/zsh"
 "7" = ":cd ~/.config/yazi"
-"8" = ":cd /share/sources/chadwm/chadwm"
-"9" = ":cd /share/sources/st"
-"0" = ":cd /share/sources/doxx"
+"8" = ":cd ~/.config/chadwm/chadwm"
+"9" = ":cd ~/.config/st"
+"0" = ":cd ~/.config/zellix"
+"n" = ":cd ~/notebooks"
+"o" = ":cd ~/Org"
 
 [keys.normal."tab"]
 tab = ":sh zellij action new-tab"
@@ -263,32 +336,32 @@ y = ":sh zellij run -c -- 'yazi'"
 s = ":pipe-to st -e nu"
 n = ":pipe-to st -e nnn"
 h = ":sh zellij run -d down -- 'home-manager switch --flake /home/Designers/.config/home-manager -b b'"
-o = ":sh zellij run -d down 'sudo nixos-rebuild switch --flake /home/Designers/.config/home-manager'"
+o = ":sh zellij run -d down -- 'sudo nixos-rebuild switch --flake /home/Designers/.config/home-manager'"
 
 # Open in tabs
 [keys.normal.space.o]
 g = ":sh zqantara --final-return 0.1 --tab --name lazygit --program lazygit"
 p = ":sh zqantara --final-return 0.1 --tab --name ipython --program 'uv run ipython'"
-a = ":sh zqantara --final-return 0.1 --tab --name aider --program aider"
+a = ":sh zqantara --final-return 0.1 --tab --name aider --program 'zsh -ic aider'"
 t = ":sh zqantara --final-return 0.1 --tab --name shell --program zsh"
 
 # Open in floating windows
 [keys.normal.space.o.f]
 p = ":sh zqantara --floating --program 'uv run ipython'"
 t = ":sh zqantara --floating --program zsh"
-c = ":sh zqantara --floating --program aider"
+c = ":sh zqantara --floating --program 'zsh -ic aider'"
 
 # Open in panes (embedded windows)
 [keys.normal.space.o.w]
 t = ":sh zqantara --pane --pos down --program zsh"
 r = ":sh zqantara --pane --pos right --program zsh"
 p = ":sh zqantara --pane --pos down --program ipython"
-a = ":sh zqantara --pane --pos stacked --program aider"
+a = ":sh zqantara --pane --pos stacked --program 'zsh -ic aider'"
 
 [keys.normal.space.r]
 # Send to named tabs
 p = ":pipe-to zqantara --final-return 0.1 --tab --name ipython"
-a = ":pipe-to zqantara --final-return 0.1 --tab --name aider"
+a = ":pipe-to zqantara --final-return 0.1 --tab --name 'zsh -ic aider'"
 t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 
 # Send to floating windows by position
@@ -316,3 +389,15 @@ s = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 # Send to panes by position
 "l" = ":pipe-to zqantara --pane --pos 'down right'"
 "h" = ":pipe-to zqantara --pane --pos 'down left'"
+
+[keys.select]
+C-space = [
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'rg -v \"^[[:space:]]*$\" | zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "collapse_selection",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode"
+]
