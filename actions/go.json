@@ -1,15 +1,16 @@
 {
   "run main": {
-    "title": "go run main",
-    "catch": "func main",
+    "title": "run main",
+    "filter": "[[ \"$TM_CURRENT_LINE\" == *main* ]] && echo true || echo false",
     "shell": [
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e go run ${TM_FILENAME}"
+      "alacritty --hold --working-directory ${TM_DIRECTORY} -e go run ${TM_FILENAME};",
+      "notify-send \"Golang\" \"RUN: ${TM_FILENAME}\""
     ],
     "description": "go run main"
   },
   "run main in tmux": {
     "title": "tmux: go run main",
-    "catch": "func main",
+    "filter": "[[ \"$(cat)\" == *main* ]] && echo true || echo false",
     "shell": [
       "tmux split-window -h -c ${WORKSPACE_FOLDER}; tmux send 'go run ${TM_FILENAME}' Enter"
     ],

@@ -1,0 +1,13 @@
+{
+  "devcpp": {
+    "prefix": "devcpp",
+    "body": [
+      "{",
+      "}"
+    ],
+    "description": "nix flake for cpp development"
+  }
+}
+
+
+

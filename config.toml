@@ -1,5 +1,7 @@
 # Linuxing helix config
 theme = "base16_transparent"
+# theme = "catppuccin_mocha"
+# theme = "gruvbox_dark_hard"
 
 [editor]
 # 真彩支持
@@ -64,15 +66,7 @@ F5 = ":sh doom +org tangle --all %{buffer_name}"
 
 F6 = ":sh st -e just run"
 
-# debug
-F7 = "dap_launch"
-F8 = "dap_continue"
-F9 = "dap_step_in"
-F10 = "dap_step_out"
-F11 = "goto_definition"
-F12 = "goto_implementation"
-
-C-esc = [
+C-A-esc = [
   "goto_first_nonwhitespace",
   "select_mode",
   "extend_to_line_end",
@@ -82,7 +76,7 @@ C-esc = [
   "collapse_selection",
   "insert_mode"
 ]
-C-space = [
+C-A-space = [
   "select_mode",
   "extend_to_line_bounds",
   ":sh zellij ac move-focus-or-tab right",
@@ -124,7 +118,7 @@ F4 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZEL
 # tangle file
 F5 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/tangle.nu %{buffer_name}"
 
-F6 = ":sh st -e just run"
+F6 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/project.nu"
 
 # debug
 F7 = "dap_launch"
@@ -206,15 +200,12 @@ s = ":wa!"
 
 
 [keys.normal.C-a]
-C-a = ":sh zellij ac toggle-floating-panes"
+C-a = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu"
 h = ":sh zellij ac new-pane -d down"
 n = ":sh zellij ac new-pane"
-r = [
-  ":sh zellij ac new-pane -d right -- nix repl",
-  ":sh zellij ac move-focus left"
-]
 v = ":sh zellij ac new-pane -d right"
 z = ":sh zellij ac toggle-fullscreen"
+m = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/neomutt.nu"
 
 [keys.normal.C-t]
 n = ":sh zellij ac new-tab"
@@ -245,7 +236,9 @@ Z = ":toggle soft-wrap.enable"
 # Open with emacsclient in a zellij floating pane
 "f" = ":pipe-to zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% --name emacsclient -- emacsclient '%{buffer_name}'"
 # Taking note with zk
-y = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/zk.nu"
+n = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/zk.nu"
+# preview note with glow
+p = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/markdown.nu '%{buffer_name}'"
 
 [keys.normal.space.f]
 # file
@@ -265,14 +258,13 @@ t = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELL
 "g" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name hx -- rg_hx"
 
 [keys.normal.space.l]
-# floating pane auto close
-a = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/ai.nu"
+a = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/ai.nu"
 h = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/home-manager.nu"
 r = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/remap.nu"
-# floating pane not auto close
 m = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/makefile.nu"
 j = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/justfile.nu"
 s = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/sh.nu"
+t = ":sh zellij action start-or-reload-plugin file:$HOME/.config/zellij/plugins/multitask.wasm --configuration \"shell=bash,ccwd=`pwd`\""
 
 [keys.normal.space.b]
 # buffer
@@ -296,6 +288,8 @@ a = ":theme ayu_light"
 b = ":theme ayu_dark"
 c = ":theme github_light"
 d = ":theme github_dark"
+e = ":theme catppuccin_latte"
+f = ":theme catppuccin_mocha"
 o = ":theme onedark"
 p = ":theme onelight"
 t = ":theme tokyonight"
@@ -305,7 +299,7 @@ n = ":theme nord"
 c = "toggle_comments"
 R = ":reload"
 t = ":new"
-d = ":bc"
+x = ":bc"
 
 [keys.normal."]"]
 "]" = ":config-reload"
@@ -323,7 +317,7 @@ d = ":bc"
 "6" = ":cd ~/.config/zsh"
 "7" = ":cd ~/.config/yazi"
 "8" = ":cd ~/.config/chadwm/chadwm"
-"9" = ":cd ~/.config/st"
+"9" = ":cd ~/.config/st-sx"
 "0" = ":cd ~/.config/zellix"
 "n" = ":cd ~/notebooks"
 "o" = ":cd ~/Org"
@@ -391,7 +385,7 @@ s = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
 "h" = ":pipe-to zqantara --pane --pos 'down left'"
 
 [keys.select]
-C-space = [
+C-A-space = [
   ":sh zellij ac move-focus-or-tab right",
   ":pipe-to sh -c 'rg -v \"^[[:space:]]*$\" | zellij ac write-chars \"$(cat)\n\"'",
   ":sh zellij ac move-focus-or-tab left",

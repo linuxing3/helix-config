@@ -1,19 +1,10 @@
 {
-  "tmux split window": {
-    "title": "tmux split window",
-    "catch": "fn test_",
+  "zellij split window": {
+    "title": "zellij split window",
+		"filter": "[[ \"$(cat)\" == *edit_in_hx* ]] && echo true || echo false",
     "shell": [
-      "tmux split-window -h",
-      "tmux send in helix"
+      "zellij action new-pane --direction=right -- hx ${TM_FILEPATH}"
     ],
-    "description": "tmux split and open helix"
-  },
-  "alacritty window helix": {
-    "title": "alacritty window",
-    "catch": "fn test_",
-    "shell": [
-      "alacritty -e hx ${TM_FILEPATH}"
-    ],
-    "description": "alacritty and open helix"
+    "description": "zellij split and open helix"
   }
 }
