@@ -1,43 +1,16 @@
 {
-  "alacritty xmake run": {
-    "title": "alacritty xmake run",
-    "catch": "target(",
-    "shell": [
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e xmake r"
-    ],
-    "description": "alacritty and xmake run"
+  "zellij split window": {
+    "title": "zellij split window",
+    "filter": "[[ \"$(cat)\" == *edit_in_hx* ]] && echo true || echo false",
+    "shell": ["zellij action new-pane --direction=right -- hx ${TM_FILEPATH}"],
+    "description": "zellij split and open helix"
   },
-  "alacritty xmake build": {
-    "title": "alacritty xmake build",
-    "catch": "target(",
+  "run main": {
+    "title": "cpp run main",
+    "filter": "[[ \"$(cat)\" == *main* ]] && echo true || echo false",
     "shell": [
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e xmake build"
+      "zellij action new-pane --cwd ${TM_DIRECTORY} -- sh -c 'g++ -o App ${TM_FILENAME} && ./App'"
     ],
-    "description": "alacritty and xmake build"
-  },
-  "alacritty xmake buildRun": {
-    "title": "alacritty xmake buildRun",
-    "catch": "target(",
-    "shell": [
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e \"xmake build ; xmake run\""
-    ],
-    "description": "alacritty and xmake build"
-  },
-  "alacritty helix": {
-    "title": "alacritty helix open file",
-    "catch": "file:///",
-    "shell": [
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e hx ${TM_SELECTED_TEXT}"
-    ],
-    "description": "alacritty and open helix"
-  },
-  "alacritty clang": {
-    "title": "alacritty clang build",
-    "catch": "main",
-    "shell": [
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e clang ${TM_FILENAME} -o ${TM_FILENAME_BASE}",
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e ./${TM_FILENAME_BASE}"
-    ],
-    "description": "alacritty and clang build"
+    "description": "go run main"
   }
 }

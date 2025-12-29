@@ -1,7 +1,7 @@
 [use-grammars]
 only = [
   # 
-  "rust", "c", "nix",
+  "rust", "c", "cpp", "nix",
   # 
   "go", "gomod", "gowork", "gotmpl",
   # 
@@ -38,6 +38,17 @@ command = "hx-lsp"
 [language-server.typos-lsp]
 command = "typos-lsp"
 config.diagnosticSeverity = "Warning"
+
+# ---------- c/cpp -----
+[[language]]
+name = "c"
+auto-format = true
+language-servers = ["clangd", "hx-lsp"]
+
+[[language]]
+name = "cpp"
+language-servers = ["clangd", "hx-lsp"]
+auto-format = true
 
 # ---------- json -----
 [[language]]

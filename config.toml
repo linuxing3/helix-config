@@ -49,7 +49,6 @@ tabpad = "·" # Tabs will look like "→···" (depending on tab width)[]
 display-messages = true
 display-inlay-hints = true
 
-# https://docs.helix-editor.com/keymap.html
 [keys.insert.j]
 j = ["normal_mode", ":write!"]
 
@@ -118,7 +117,7 @@ F4 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZEL
 # tangle file
 F5 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/tangle.nu %{buffer_name}"
 
-F6 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/project.nu"
+F6 = ":sh zellij run -c -f -x 30%% -y 10%% --width 40%% --height 80%% -- nu $ZELLIX_MOD/project.nu"
 
 # debug
 F7 = "dap_launch"
