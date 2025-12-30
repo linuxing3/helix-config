@@ -1,31 +1,86 @@
 [use-grammars]
 only = [
   # 
-  "rust", "c", "cpp", "nix",
+  "rust",
+  "c",
+  "cpp",
+  "nix",
   # 
-  "go", "gomod", "gowork", "gotmpl",
+  "go",
+  "gomod",
+  "gowork",
+  "gotmpl",
   # 
-  "python", "bash", "lua", "scheme", "sql",
+  "python",
+  "bash",
+  "lua",
+  "scheme",
+  "sql",
   # 
-  "php", "php-only",
+  "php",
+  "php-only",
   # 
-  "html", "css", "scss", "javascript", "jsdoc", "typescript", "jsx", "vue", "svelte",
+  "html",
+  "css",
+  "scss",
+  "javascript",
+  "jsdoc",
+  "typescript",
+  "jsx",
+  "vue",
+  "svelte",
   # 
-  "json", "jsonc", "json5", "toml", "yaml", "xml", "ini", "kdl", "ron",
+  "json",
+  "jsonc",
+  "json5",
+  "toml",
+  "yaml",
+  "xml",
+  "ini",
+  "kdl",
+  "ron",
   # 
-  "gdscript", "godot-resource", "glsl", "wgsl", "gdshader",
+  "gdscript",
+  "godot-resource",
+  "glsl",
+  "wgsl",
+  "gdshader",
   # 
-  "git-config", "git-commit", "git-ignore", "git-rebase", "git-attributes", "sshclientconfig",
+  "git-config",
+  "git-commit",
+  "git-ignore",
+  "git-rebase",
+  "git-attributes",
+  "sshclientconfig",
   # 
-  "hosts", "env", "make", "cmake",
+  "hosts",
+  "env",
+  "make",
+  "cmake",
   # 
-  "comment", "diff", "regex",
+  "comment",
+  "diff",
+  "regex",
   # 
-  "latex", "typst", "markdown", "markdown.inline", "task", "todotxt", "mail",
+  "latex",
+  "typst",
+  "markdown",
+  "markdown.inline",
+  "task",
+  "todotxt",
+  "mail",
   # 
-  "log", "glicol",
+  "log",
+  "glicol",
   # 
-  "dot", "hurl", "http", "po", "fluent", "pest", "beancount", "slint",
+  "dot",
+  "hurl",
+  "http",
+  "po",
+  "fluent",
+  "pest",
+  "beancount",
+  "slint",
 ]
 
 [language-server.hx-lsp]
@@ -53,12 +108,20 @@ auto-format = true
 # ---------- json -----
 [[language]]
 name = "json"
-formatter = { command = "prettier", args = ["--write", "--stdin-filepath", "%{buffer_name}"] }
+formatter = { command = "prettier", args = [
+  "--write",
+  "--stdin-filepath",
+  "%{buffer_name}",
+] }
 auto-format = true
 
 [[language]]
 name = "jsonc"
-formatter = { command = "prettier", args = ["--write", "--stdin-filepath", "%{buffer_name}"] }
+formatter = { command = "prettier", args = [
+  "--write",
+  "--stdin-filepath",
+  "%{buffer_name}",
+] }
 auto-format = true
 
 # ---------- nix -----

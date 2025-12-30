@@ -18,15 +18,29 @@ select = "underline"
 
 # 状态栏定义
 [editor.statusline]
-left = ["mode", "spacer", "spinner", "spacer", "file-name", "file-modification-indicator"]
-center = ["diagnostics","workspace-diagnostics"]
-right = [ "selections", "position", "position-percentage", "file-encoding", "file-line-ending", "file-type", ]
+left = [
+  "mode",
+  "spacer",
+  "spinner",
+  "spacer",
+  "file-name",
+  "file-modification-indicator",
+]
+center = ["diagnostics", "workspace-diagnostics"]
+right = [
+  "selections",
+  "position",
+  "position-percentage",
+  "file-encoding",
+  "file-line-ending",
+  "file-type",
+]
 
 [editor.soft-wrap]
 enable = true
-max-wrap = 25 # increase value to reduce forced mid-word  wrapping
+max-wrap = 25         # increase value to reduce forced mid-word  wrapping
 max-indent-retain = 0
-wrap-indicator = ""  # set wrap-indicator to "" to hide it
+wrap-indicator = ""   # set wrap-indicator to "" to hide it
 
 [editor.indent-guides]
 render = true
@@ -43,7 +57,7 @@ space = " "
 nbsp = "⍽"
 tab = "→"
 newline = "⏎"
-tabpad = "·" # Tabs will look like "→···" (depending on tab width)[]
+tabpad = "·"  # Tabs will look like "→···" (depending on tab width)[]
 
 [editor.lsp]
 display-messages = true
@@ -54,7 +68,7 @@ j = ["normal_mode", ":write!"]
 
 [keys.insert]
 # just commands
-F1 = [ ":format" ]
+F1 = [":format"]
 F2 = "rename_symbol"
 # run lazygit
 F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
@@ -73,7 +87,7 @@ C-A-esc = [
   ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
   ":sh zellij ac move-focus-or-tab left",
   "collapse_selection",
-  "insert_mode"
+  "insert_mode",
 ]
 C-A-space = [
   "select_mode",
@@ -82,7 +96,7 @@ C-A-space = [
   ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
   ":sh zellij ac move-focus-or-tab left",
   "collapse_selection",
-  "insert_mode"
+  "insert_mode",
 ]
 
 "C-/" = "toggle_comments"
@@ -97,18 +111,35 @@ C-A-space = [
 "C-h" = "move_prev_word_start"
 
 # multi selection
-C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+C-r = [
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "select_mode",
+]
 
 # extend_line_below and up
-"S-A-up" = ["move_visual_line_up", "extend_line_below", "delete_selection", "paste_after", "collapse_selection", "move_visual_line_up"]
-"S-A-down" = ["extend_line_below", "delete_selection", "paste_after", "collapse_selection"]
+"S-A-up" = [
+  "move_visual_line_up",
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+  "move_visual_line_up",
+]
+"S-A-down" = [
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+]
 
 # duplicate
 "C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
 
 [keys.normal]
 # just commands
-F1 = [ ":format" ]
+F1 = [":format"]
 F2 = "rename_symbol"
 # lazygit
 F3 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/git.nu"
@@ -143,7 +174,7 @@ C-esc = [
   "move_visual_line_down",
   "goto_first_nonwhitespace",
   "collapse_selection",
-  "normal_mode"
+  "normal_mode",
 ]
 C-space = [
   "select_mode",
@@ -154,23 +185,40 @@ C-space = [
   "move_visual_line_down",
   "goto_first_nonwhitespace",
   "collapse_selection",
-  "normal_mode"
+  "normal_mode",
 ]
 
 # multi selection
-C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select_mode"]
+C-r = [
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "select_mode",
+]
 
 # line start and end
 "$" = ["split_selection_on_newline", "insert_at_line_end", "normal_mode"]
 "0" = ["split_selection_on_newline", "insert_at_line_start", "normal_mode"]
 
 # extend_line_below and up
-"S-A-up" = ["move_visual_line_up", "extend_line_below", "delete_selection", "paste_after", "collapse_selection", "move_visual_line_up"]
-"S-A-down" = ["extend_line_below", "delete_selection", "paste_after", "collapse_selection"]
+"S-A-up" = [
+  "move_visual_line_up",
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+  "move_visual_line_up",
+]
+"S-A-down" = [
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+]
 
 # duplicate
 "C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
- 
+
 # delete line
 U = "kill_to_line_start"
 D = "kill_to_line_end"
@@ -274,13 +322,13 @@ n = ":new"
 v = ":vnew"
 h = ":hnew"
 c = ":wbc!"
-o = ":bco!" 
+o = ":bco!"
 
 [keys.normal.space.c]
 # lsp functions
 a = "code_action"
 r = "rename_symbol"
-f = ":format" 
+f = ":format"
 i = ":toggle lsp.display-inlay-hints"
 
 [keys.normal.space.t]
@@ -294,7 +342,7 @@ f = ":theme catppuccin_mocha"
 o = ":theme onedark"
 p = ":theme onelight"
 t = ":theme tokyonight"
-n = ":theme nord" 
+n = ":theme nord"
 
 [keys.normal.g]
 c = "toggle_comments"
@@ -394,5 +442,5 @@ C-A-space = [
   "move_visual_line_down",
   "goto_first_nonwhitespace",
   "collapse_selection",
-  "normal_mode"
+  "normal_mode",
 ]
