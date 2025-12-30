@@ -1,15 +1,23 @@
 {
-  "zellij split window": {
-    "title": "zellij split window",
+  "run helix in zellij": {
+    "title": "zellij: edit in helix",
     "filter": "[[ \"$(cat)\" == *edit_in_hx* ]] && echo true || echo false",
     "shell": ["zellij action new-pane --direction=right -- hx ${TM_FILEPATH}"],
     "description": "zellij split and open helix"
   },
-  "run main": {
-    "title": "cpp run main",
+  "run main in tmux": {
+    "title": "tmux: cpp run main",
     "filter": "[[ \"$(cat)\" == *main* ]] && echo true || echo false",
     "shell": [
-      "zellij action new-pane --cwd ${TM_DIRECTORY} -- sh -c 'g++ -o App ${TM_FILENAME} && ./App'"
+      "tmux split-window -h -c ${WORKSPACE_FOLDER}; tmux send 'go run ${TM_FILENAME}' Enter"
+    ],
+    "description": "go run main"
+  },
+  "run main in zellij": {
+    "title": "zellij: cpp run main",
+    "filter": "[[ \"$(cat)\" == *main* ]] && echo true || echo false",
+    "shell": [
+      "zellij action new-pane --cwd ${TM_DIRECTORY} -- sh -c 'g++ -o App ${TM_FILENAME} -lGL -lGLU -lglut -lglfw -lm -lpthread -lsfml-graphics -lsfml-window -lsfml-system && ./App'"
     ],
     "description": "go run main"
   }

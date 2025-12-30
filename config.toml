@@ -54,16 +54,16 @@ j = ["normal_mode", ":write!"]
 
 [keys.insert]
 # just commands
-F1 = ":format"
+F1 = [ ":format" ]
 F2 = "rename_symbol"
 # run lazygit
 F3 = [":n", ":insert-output lazygit", ":bc!", ":redraw"]
 # open yazi finder
 F4 = [":n", ":insert-output yazi", ":bc!", ":redraw"]
-# tangle current file 
-F5 = ":sh doom +org tangle --all %{buffer_name}"
-
-F6 = ":sh st -e just run"
+# open just
+F5 = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/justfile.nu"
+# open project
+F6 = ":sh zellij run -c -f -x 30%% -y 10%% --width 40%% --height 80%% -- nu $ZELLIX_MOD/project.nu"
 
 C-A-esc = [
   "goto_first_nonwhitespace",
@@ -108,15 +108,15 @@ C-r = ["move_prev_word_start", "move_next_word_end", "search_selection", "select
 
 [keys.normal]
 # just commands
-F1 = ":format"
+F1 = [ ":format" ]
 F2 = "rename_symbol"
 # lazygit
 F3 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/git.nu"
 # open yazi finder
 F4 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/yazi.nu"
-# tangle file
-F5 = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/tangle.nu %{buffer_name}"
-
+# open just
+F5 = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/justfile.nu"
+# open project
 F6 = ":sh zellij run -c -f -x 30%% -y 10%% --width 40%% --height 80%% -- nu $ZELLIX_MOD/project.nu"
 
 # debug
@@ -264,6 +264,8 @@ m = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_
 j = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/justfile.nu"
 s = ":sh zellij run -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/sh.nu"
 t = ":sh zellij action start-or-reload-plugin file:$HOME/.config/zellij/plugins/multitask.wasm --configuration \"shell=bash,ccwd=`pwd`\""
+# tangle file
+g = ":sh zellij run -c -f -x 10%% -y 10%% --width 80%% --height 80%% -- nu $ZELLIX_MOD/tangle.nu %{buffer_name}"
 
 [keys.normal.space.b]
 # buffer

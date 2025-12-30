@@ -1,18 +1,23 @@
 {
-  "run main": {
-    "title": "run main",
-    "filter": "[[ \"$TM_CURRENT_LINE\" == *main* ]] && echo true || echo false",
-    "shell": [
-      "alacritty --hold --working-directory ${TM_DIRECTORY} -e go run ${TM_FILENAME};",
-      "notify-send \"Golang\" \"RUN: ${TM_FILENAME}\""
-    ],
-    "description": "go run main"
+  "run helix in helix": {
+    "title": "zellij: edit in helix",
+    "filter": "[[ \"$(cat)\" == *edit_in_hx* ]] && echo true || echo false",
+    "shell": ["zellij action new-pane --direction=right -- hx ${TM_FILEPATH}"],
+    "description": "zellij split and open helix"
   },
   "run main in tmux": {
     "title": "tmux: go run main",
     "filter": "[[ \"$(cat)\" == *main* ]] && echo true || echo false",
     "shell": [
       "tmux split-window -h -c ${WORKSPACE_FOLDER}; tmux send 'go run ${TM_FILENAME}' Enter"
+    ],
+    "description": "go run main"
+  },
+  "run main in zellij": {
+    "title": "zellij: cpp run main",
+    "filter": "[[ \"$(cat)\" == *main* ]] && echo true || echo false",
+    "shell": [
+      "zellij action new-pane --cwd ${TM_DIRECTORY} -- sh -c 'go run ${TM_FILENAME}'"
     ],
     "description": "go run main"
   }
