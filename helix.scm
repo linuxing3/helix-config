@@ -74,7 +74,7 @@
 (require-builtin steel/random as rand::)
 
 ;; Picking one from the possible themes is _fine_
-; (define possible-themes '("tokyonight_storm" "catppuccin_macchiato" "kanagawa"))
+(define possible-themes '("tokyonight_storm" "catppuccin_macchiato" "kanagawa"))
 
 (define (select-random lst)
   (let ([index (rand::rng->gen-range 0 (length lst))]) (list-ref lst index)))

@@ -1,5 +1,3 @@
-"/home/Designers/.config/helix/helix.scm"
-"/home/Designers/.config/helix/init.scm"
-"/home/Designers/.config/helix/README.md"
-"/home/Designers/.config/helix/README.zh-CN.md"
 "/home/Designers/.config/helix/AGENTS.md"
+"/home/Designers/.config/helix/init.scm"
+"/home/Designers/.config/helix/config.toml"

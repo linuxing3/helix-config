@@ -1,9 +1,8 @@
 (define package-name 'mattwparas-helix-package)
 (define version "0.1.0")
 
-;; Point to all of the packages that exist
-(define dependencies
-  '((#:name steel-pty #:git-url "https://github.com/mattwparas/steel-pty.git")
-    (#:name helix-file-watcher #:git-url "https://github.com/mattwparas/helix-file-watcher.git")))
+;; steel-pty built manually via nix-shell + cargo-steel-lib (2026-03-19)
+;; helix-file-watcher still disabled (requires separate build)
+(define dependencies '())
 
-(define dylibs '())
+(define dylibs '((#:name "steel-pty")))

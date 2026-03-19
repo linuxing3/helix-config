@@ -66,7 +66,7 @@
                  (auto-format #true)
                  (language-servers '("steel-language-server")))
 
-(when (equal? (command-line) '("hx"))
+(when (equal? (command-line) '("hxx"))
   (show-splash))
 
 ;; Probably should be a symbol?

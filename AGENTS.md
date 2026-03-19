@@ -100,8 +100,68 @@ No `.cursor/rules/`, `.cursorrules`, or
 `.github/copilot-instructions.md` were found in this repo.
 If you add them later, update this file to include their guidance.
 
+## Native extensions (dylibs)
+
+This Helix config uses Steel scripting with native dynamic libraries.
+The dylib source repos are **not** submodules; they are built out-of-tree
+and installed to `~/.local/share/steel/native/`.
+
+### steel-pty (embedded terminal)
+
+Provides `:open-term`, `:new-term`, `:kill-active-terminal`, etc.
+
+**Quick build** (requires `nix` in PATH):
+
+```bash
+./scripts/build-steel-pty.sh
+```
+
+**Manual build**:
+
+```bash
+git clone --depth 1 https://github.com/mattwparas/steel-pty.git /tmp/steel-pty
+cd /tmp/steel-pty
+nix-shell -p rustc cargo pkg-config git openssl openssl.dev \
+  --run "cargo-steel-lib"
+```
+
+- `cargo-steel-lib` (from Steel nix package) builds the cdylib and
+  copies `libsteel_pty.so` to `~/.local/share/steel/native/`.
+- If cargo fails to fetch the wezterm Git dependency, ensure
+  `~/.cargo/config.toml` contains:
+  ```toml
+  [net]
+  git-fetch-with-cli = true
+  ```
+- Build takes ~8 min on aarch64. Restart Helix after installing.
+
+### Rebuild triggers
+
+Rebuild steel-pty when:
+- Helix or Steel is upgraded (ABI may change)
+- `term.scm` is updated from upstream
+- `:open-term` starts failing with `TypeMismatch` errors
+
+### cog.scm
+
+`cog.scm` declares which dylibs this config uses. After building
+steel-pty, ensure it contains:
+
+```scheme
+(define dylibs '((#:name "steel-pty")))
+```
+
+### Dylib search path
+
+Steel looks for `.so` files in (order):
+1. `~/.local/share/steel/native/`
+2. `$STEEL_HOME/native/` (nix profile: `~/.nix-profile/lib/steel/native/`)
+
 ## Notes for agents
 
-- This repository is a Helix config; changes often involve TOML and JSON.
+- This repository is a Helix config; changes often involve TOML, JSON,
+  and Steel Scheme (`.scm`).
 - Use `:format` in Helix (bound to `F1`) when formatting is needed.
 - Avoid repo-wide formatting. Keep changes scoped to relevant files only.
+- Self-improvement logs live in `.learnings/` — check before
+  troubleshooting recurring issues.

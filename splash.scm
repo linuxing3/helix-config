@@ -66,10 +66,13 @@
                   0)
 
   ;; Render the various things. Probably just, <space> - F to pick files?
-  (frame-set-string! frame x (+ y splash-depth 3) "<space>f to open the file picker" keyword)
-  (frame-set-string! frame x (+ y splash-depth 4) "<space>? to see all the commands" keyword)
-  (frame-set-string! frame x (+ y splash-depth 5) ":theme <name> to change themes" keyword)
-  (frame-set-string! frame x (+ y splash-depth 6) ":evalp to evaluate a steel expression" keyword))
+  (frame-set-string! frame x (+ y splash-depth 3) "<space>ff to open the file picker" keyword)
+  (frame-set-string! frame x (+ y splash-depth 4) "<space>f. to open picker in cwd" keyword)
+  (frame-set-string! frame x (+ y splash-depth 5) "<space>fn to open picker in nnn" keyword)
+  (frame-set-string! frame x (+ y splash-depth 6) "<space>fp to open project picker" keyword)
+  (frame-set-string! frame x (+ y splash-depth 7) "<space>? to see all the commands" keyword)
+  (frame-set-string! frame x (+ y splash-depth 8) ":theme <name> to change themes" keyword)
+  (frame-set-string! frame x (+ y splash-depth 9) ":evalp to evaluate a steel expression" keyword))
 
 (define (splash-event-handler _ event)
   (if (key-event? event) event-result/ignore-and-close event-result/ignore))
