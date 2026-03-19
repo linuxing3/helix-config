@@ -1,5 +1,5 @@
 {
-  description = "A Nix-flake-based C/C++ development environment";
+  description = "A Nix-flake-based Node.js development environment";
   inputs.nixpkgs.url = "https://flakehub.com/f/NixOS/nixpkgs/0";
   outputs =
     { self, ... }@inputs:
@@ -21,21 +21,14 @@
         { pkgs }:
         {
           default =
-            pkgs.mkShell.override
-              {
-                stdenv = pkgs.clangStdenv;
-              }
+            pkgs.mkShell
               {
                 packages =
                   with pkgs;
                   [
-                    helix
-                    hx-lsp
-                    nil
-                    nixd
-                    markdown-oxide
-                    markdown-toc
-                    markdownlint-cli
+                    nodejs
+                    nodePackages.npm
+                    bun
                   ];
               };
           }

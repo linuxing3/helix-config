@@ -83,6 +83,11 @@ only = [
   "slint",
 ]
 
+[language-server.helix-assist]
+command = "helix-assist"
+# Optional
+args = ["--handler", "openai", "--num-suggestions", "2"]
+
 [language-server.hx-lsp]
 command = "hx-lsp"
 
@@ -98,11 +103,11 @@ config.diagnosticSeverity = "Warning"
 [[language]]
 name = "c"
 auto-format = true
-language-servers = ["clangd", "hx-lsp"]
+language-servers = ["clangd", "hx-lsp", "helix-assist" ]
 
 [[language]]
 name = "cpp"
-language-servers = ["clangd", "hx-lsp"]
+language-servers = ["clangd", "hx-lsp", "helix-assist" ]
 auto-format = true
 
 # ---------- json -----
@@ -127,17 +132,18 @@ auto-format = true
 # ---------- nix -----
 [[language]]
 name = "nix"
-language-servers = ["hx-lsp", "nil", "nixd"]
+language-servers = ["hx-lsp", "nil", "nixd", "helix-assist"]
 
 # ---------- rust -----
 [[language]]
 name = "rust"
-language-servers = ["rust-analyzer", "hx-lsp", "typos-lsp"]
+language-servers = ["rust-analyzer", "hx-lsp", "typos-lsp", "helix-assist"]
+formatter = { command = "rustfmt", args = [] }
 
 [language.debugger]
 name = "lldb-dap"
 transport = "stdio"
-command = "lldb-vscode"
+command = "rust-lldb"
 
 [[language.debugger.templates]]
 name = "binary"
@@ -150,7 +156,7 @@ args = { program = "{0}", initCommands = [
 # ---------- golang ----------------
 [[language]]
 name = "go"
-language-servers = ["gopls", "golangci-lint-lsp", "hx-lsp", "typos-lsp"]
+language-servers = ["gopls", "golangci-lint-lsp", "hx-lsp", "typos-lsp", "helix-assist" ]
 
 # [[language.debugger.templates]]
 # name = "binary"
@@ -371,7 +377,7 @@ file-types = [
 # --- markdown ----
 [[language]]
 name = "markdown"
-language-servers = ["marksman", "markdown-oxide", "hx-lsp", "typos-lsp"]
+language-servers = ["marksman", "markdown-oxide", "hx-lsp", "typos-lsp", "helix-assist"]
 # 设定 zen-mode-like
 text-width = 80
 soft-wrap = { enable = true, wrap-at-text-width = true }
