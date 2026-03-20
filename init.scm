@@ -6,6 +6,8 @@
 (require "helix/configuration.scm")
 (require "splash.scm")
 (require "focus.scm")
+(require "scooter/scooter.scm")
+(require (only-in "cogs/projects.scm" project-switch project-add project-add-current project-delete project-discover))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

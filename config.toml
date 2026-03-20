@@ -184,9 +184,104 @@ workspace-diagnostics = ["warning", "error"]
 
 # ==================== 键盘快捷键 ====================
 [keys.normal]
+
+F1 = ":open-term"
+A-F1 = ":kill-active-terminal"
+F2 = "rename_symbol"
+F3 = ":project-add-current"
+F4 = ":project-add %%selection"
+F5 = ":project-switch"
+F6 = ":project-delete"
+F7 = "dap_launch"
+F8 = "dap_continue"
+F9 = "dap_step_in"
+F10 = "dap_step_out"
+F11 = "goto_definition"
+F12 = "goto_implementation"
+
 # Tab 智能缩进
 tab = "move_parent_node_end"
 S-tab = "move_parent_node_start"
+
+# smart pane/tab/window navigation
+# 智能窗格导航：zellij > kitty/wezterm/ghostty/rio > 窗口管理器
+C-h = ":sh ~/.config/helix/scripts/nav.sh left"
+C-j = ":sh ~/.config/helix/scripts/nav.sh down"
+C-k = ":sh ~/.config/helix/scripts/nav.sh up"
+C-l = ":sh ~/.config/helix/scripts/nav.sh right"
+
+C-A-esc = [
+  "goto_first_nonwhitespace",
+  "select_mode",
+  "extend_to_line_end",
+  ":sh zellij ac move-focus-or-tab right >/dev/null 2>&1",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\" >/dev/null 2>&1'",
+  ":sh zellij ac move-focus-or-tab left >/dev/null 2>&1",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode",
+]
+C-A-space = [
+  "select_mode",
+  "extend_to_line_bounds",
+  ":sh zellij ac move-focus-or-tab right >/dev/null 2>&1",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\" >/dev/null 2>&1'",
+  ":sh zellij ac move-focus-or-tab left >/dev/null 2>&1",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode",
+]
+
+# multi selection
+# 多重选择
+C-m = [
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "select_mode",
+]
+
+# line start and end
+# 行首行尾操作
+"$" = ["split_selection_on_newline", "insert_at_line_end", "normal_mode"]
+"0" = ["split_selection_on_newline", "insert_at_line_start", "normal_mode"]
+
+# extend_line_below and up
+# 向下/向上扩展行
+"S-A-up" = [
+  "move_visual_line_up",
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+  "move_visual_line_up",
+]
+"S-A-down" = [
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+]
+
+# duplicate
+# 复制当前行
+"C-A-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
+
+# delete line
+# 删除整行
+U = "kill_to_line_start"
+D = "kill_to_line_end"
+
+# comments
+# 注释操作
+"C-/" = "toggle_comments"
+
+# indent
+# 缩进控制
+"C-]" = "indent"
+"C-[" = "unindent"
 
 # ==================== 常用操作 ====================
 "\\" = ":reflow"         # 重新格式化段落
@@ -196,7 +291,7 @@ S-tab = "move_parent_node_start"
 
 # 保存相关
 "C-s" = ":write"          # 保存
-"C-j" = "save_selection"  # 保存选区
+"C-'" = "save_selection"  # 保存选区
 
 "A-/" = "toggle_comments"  # 切换注释
 
@@ -206,23 +301,23 @@ S-tab = "move_parent_node_start"
 
 # ==================== 输入法切换 ====================
 # Esc 退出插入模式时切换到英文
-"esc" = ["normal_mode", ":pipe-to bash ~/.config/helix/scripts/ime-switch"]
+"esc" = ["normal_mode", ":sh bash ~/.config/helix/scripts/ime-switch >/dev/null 2>&1"]
 
 # 插入模式进入时切换到英文
-i = ["insert_mode", ":pipe-to bash ~/.config/helix/scripts/ime-switch 1"]
-I = ["insert_at_line_start", ":pipe-to bash ~/.config/helix/scripts/ime-switch 1"]
+i = ["insert_mode", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
+I = ["insert_at_line_start", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
 
 # a/A 保持进入插入模式时切换英文
 a = [
   "move_char_right",
   "insert_mode",
-  ":pipe-to bash ~/.config/helix/scripts/ime-switch 1",
+  ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1",
 ]
-A = ["insert_at_line_end", ":pipe-to bash ~/.config/helix/scripts/ime-switch 1"]
+A = ["insert_at_line_end", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
 
 # o/O 打开新行时切换英文
-o = ["open_below", ":pipe-to bash ~/.config/helix/scripts/ime-switch 1"]
-O = ["open_above", ":pipe-to bash ~/.config/helix/scripts/ime-switch 1"]
+o = ["open_below", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
+O = ["open_above", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
 
 # ==================== Space 模式 ====================
 [keys.normal.space]
@@ -231,11 +326,46 @@ O = ["open_above", ":pipe-to bash ~/.config/helix/scripts/ime-switch 1"]
 "." = "file_picker_in_current_buffer_directory" # 当前目录文件选择
 "n" = "signature_help"    # 函数签名帮助
 
+[keys.normal."]"]
+"]" = ":config-reload"
+[keys.normal."["]
+"[" = ":config-open"
+
+[keys.normal.space.c]
+# lsp functions
+# LSP 功能
+a = "code_action"
+r = "rename_symbol"
+f = ":format"
+i = ":toggle lsp.display-inlay-hints"
+s = ":switcheroo"
+c = ":sh st -e zellij -l cursor-nnn >/dev/null 2>&1 &"
+
+[keys.normal.space.t]
+# theme
+# 主题
+a = ":theme ayu_light"
+b = ":theme ayu_dark"
+c = ":theme gruvbox_light_hard"
+d = ":theme gruvbox_dark_hard"
+e = ":theme catppuccin_latte"
+f = ":theme catppuccin_mocha"
+o = ":theme onedark"
+p = ":theme onelight"
+t = ":theme tokyonight"
+n = ":theme nord"
+
+[keys.normal.g]
+c = "toggle_comments"
+R = ":reload"
+t = ":new"
+x = ":bc"
+
 # ==================== 外部程序集成 ====================
-[keys.normal.space.o]
+[keys.normal.space.p]
 
 # Scooter 全局搜索
-# 需要安装: https://github.com/thomasschafer/scooter
+# 需要安装: https://github.com/thomahttps://github.com/thomasschafer/scooter.hxsschafer/scooter
 s = [
   ":write-all",
   ":insert-output scooter --no-stdin >/dev/tty",
@@ -268,13 +398,34 @@ e = [
   ':set mouse true',
 ]
 
+# nnn 文件选择器
+# 需要安装: https://github.com/jarun/nnn
+# 打开 nnn 时以当前文件目录为起点，选中文件后 cd 到该文件所在目录
+n = [
+  ':insert-output ~/.config/helix/scripts/nnn-pick.sh "%{buffer_name}"',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/hx-nnn-pick}',
+  ':cd %sh{dirname "$(cat /tmp/hx-nnn-pick)"}',
+  ':redraw',
+  ':set mouse false',
+  ':set mouse true',
+]
+
+# 项目管理
+# Space p p = 切换项目 | Space p a = 添加当前项目 | Space p d = 删除项目
+# Space p s = 扫描当前目录下的 git 子目录并添加
+p = ":project-switch"
+a = ":project-add-current"
+d = ":project-delete"
+b = ":project-discover"
+
 # ==================== 插入模式快捷键 ====================
 [keys.insert]
 # Tab 智能缩进
 S-tab = "move_parent_node_start"
 
 # Esc 退出时切换英文
-"esc" = ["normal_mode", ":pipe-to bash ~/.config/helix/scripts/ime-switch"]
+"esc" = ["normal_mode", ":sh bash ~/.config/helix/scripts/ime-switch >/dev/null 2>&1"]
 
 # 保持插入时在屏幕中间 (用于 zen mode)
 # "ret" = ["insert_newline", 'align_view_center']
@@ -283,6 +434,9 @@ S-tab = "move_parent_node_start"
 [keys.select]
 tab = "extend_parent_node_end"
 S-tab = "extend_parent_node_start"
+
+[keys.insert.j]
+j = "normal_mode"
 
 # ==================== 其他可选配置 ====================
 # [editor.sticky-context]

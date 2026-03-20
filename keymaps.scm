@@ -1,4 +1,4 @@
-(require "cogs.hx/keymaps.scm")
+(require "cogs/keymaps.scm")
 (require (only-in "cogs/file-tree.scm" FILE-TREE-KEYBINDINGS FILE-TREE))
 (require (only-in "cogs/recentf.scm" recentf-open-files get-recent-files recentf-snapshot))
 

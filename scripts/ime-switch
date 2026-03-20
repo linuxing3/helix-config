@@ -102,7 +102,7 @@ function fcitx_toggle {
 
 function fcitx_en {
     local current_input_method
-    current_input_method=$(fcitx_get)
+    current_input_method=$(fcitx_get 2>/dev/null)
     ensure_cache_dir
     echo "$current_input_method" > "$fcitx_cache_file"
 
@@ -114,7 +114,7 @@ function fcitx_en {
 
 function fcitx_re {
     local current_input_method
-    current_input_method=$(fcitx_get)
+    current_input_method=$(fcitx_get 2>/dev/null)
     # 读取记录的上次的输入法 
     # 如果输入法状态被保存在文件中，读取上次的值
     ensure_cache_dir
@@ -155,9 +155,9 @@ elif [[ $(uname) == "Linux" ]]; then
             *) fcitx_toggle ;;
         esac
     else
-        echo "fcitx-remote 未找到"
+        echo "fcitx-remote 未找到" >&2
         exit 1
     fi
 else
-    echo "无法确定当前系统"
+    echo "无法确定当前系统" >&2
 fi
