@@ -2,4 +2,5 @@
 "/home/Designers/.config/helix/tutors/zh_cn"
 "/home/Designers/.config/helix/scripts/ime-switch"
 "/home/Designers/.config/helix/README.md"
+"/home/Designers/.config/helix/.gitignore"
 "/home/Designers/.config/helix/init.scm"
