@@ -1,0 +1,496 @@
+# Linuxing helix config
+# theme = "base16_transparent"
+theme = "gruvbox_dark_hard"
+
+[editor]
+# 真彩支持
+true-color = true
+bufferline = "never"
+cursorline = true
+cursorcolumn = false
+
+# 光标样式
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+# 状态栏定义
+[editor.statusline]
+left = [
+  "mode",
+  "spacer",
+  "spinner",
+  "spacer",
+  "file-absolute-path",
+  "file-modification-indicator",
+]
+center = ["diagnostics", "workspace-diagnostics"]
+right = [
+  # "selections",
+  "position",
+  # "position-percentage",
+  "file-encoding",
+  "file-line-ending",
+  "file-type",
+]
+
+[editor.soft-wrap]
+enable = true
+max-wrap = 25         # increase value to reduce forced mid-word  wrapping
+max-indent-retain = 0
+wrap-indicator = ""   # set wrap-indicator to "" to hide it
+
+[editor.indent-guides]
+# render = true
+# character = "┊" # Some characters that work well: "▏", "┆", "┊", "⸽"
+# skip-levels = 1
+
+[editor.whitespace.render]
+space = "none"
+tab = "none"
+newline = "none"
+
+[editor.whitespace.characters]
+# space = " "
+# nbsp = "⍽"
+# tab = "→"
+# newline = "⏎"
+# tabpad = "·"  # Tabs will look like "→···" (depending on tab width)[]
+
+[editor.lsp]
+display-messages = false
+display-inlay-hints = false
+
+[keys.insert.j]
+j = "normal_mode"
+
+[keys.insert]
+# just commands
+# just 快捷命令
+F1 = [":format"]
+F2 = "rename_symbol"
+# run lazygit
+# 运行 lazygit 终端
+F3 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/git.nu\""
+# open yazi finder
+# 打开 yazi 查找器
+F4 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/yazi.nu\""
+# open just
+# 打开 just
+F5 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/justfile.nu\""
+# open project
+# 打开 project
+F6 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/project.nu\""
+
+C-A-esc = [
+  "goto_first_nonwhitespace",
+  "select_mode",
+  "extend_to_line_end",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "collapse_selection",
+  "insert_mode",
+]
+C-A-space = [
+  "select_mode",
+  "extend_to_line_bounds",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "collapse_selection",
+  "insert_mode",
+]
+
+"C-/" = "toggle_comments"
+
+"C-]" = "indent"
+"C-[" = "unindent"
+
+"C-a" = "insert_at_line_start"
+"C-e" = "insert_at_line_end"
+
+"C-l" = "move_next_word_end"
+"C-h" = "move_prev_word_start"
+
+# multi selection
+# 多重选择
+C-r = [
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "select_mode",
+]
+
+# extend_line_below and up
+# 向下/向上扩展行
+"S-A-up" = [
+  "move_visual_line_up",
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+  "move_visual_line_up",
+]
+"S-A-down" = [
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+]
+
+# duplicate
+# 复制当前行
+"C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
+
+[keys.normal]
+# just commands
+# just 快捷命令
+F1 = [":format"]
+F2 = "rename_symbol"
+# lazygit
+# lazygit 窗口
+F3 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/git.nu\""
+# open yazi finder
+# 打开 yazi 查找器
+F4 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/yazi.nu\""
+# open just
+# 打开 just
+F5 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/justfile.nu\""
+# open project
+# 打开 project
+F6 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/project.nu\""
+
+C-F5 = ":open-term"
+C-F6 = ":kill-active-term"
+
+# debug
+# 调试命令
+F7 = "dap_launch"
+F8 = "dap_continue"
+F9 = "dap_step_in"
+F10 = "dap_step_out"
+F11 = "goto_definition"
+F12 = "goto_implementation"
+
+# interact with zellij
+# 与 zellij 交互
+C-h = ":sh zellij ac move-focus-or-tab left"
+C-j = ":sh zellij ac move-focus-or-tab down"
+C-k = ":sh zellij ac move-focus-or-tab up"
+C-l = ":sh zellij ac move-focus-or-tab right"
+
+C-A-esc = [
+  "goto_first_nonwhitespace",
+  "select_mode",
+  "extend_to_line_end",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode",
+]
+C-A-space = [
+  "select_mode",
+  "extend_to_line_bounds",
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode",
+]
+
+# multi selection
+# 多重选择
+C-r = [
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "select_mode",
+]
+
+# line start and end
+# 行首行尾操作
+"$" = ["split_selection_on_newline", "insert_at_line_end", "normal_mode"]
+"0" = ["split_selection_on_newline", "insert_at_line_start", "normal_mode"]
+
+# extend_line_below and up
+# 向下/向上扩展行
+"S-A-up" = [
+  "move_visual_line_up",
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+  "move_visual_line_up",
+]
+"S-A-down" = [
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+]
+
+# duplicate
+# 复制当前行
+"C-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
+
+# delete line
+# 删除整行
+U = "kill_to_line_start"
+D = "kill_to_line_end"
+
+# comments
+# 注释操作
+"C-/" = "toggle_comments"
+
+# indent
+# 缩进控制
+"C-]" = "indent"
+"C-[" = "unindent"
+
+# buffer
+# 缓冲区控制
+"C-c" = ":new"
+"C-q" = ":wbc!"
+H = ":bp"
+L = ":bn"
+
+# End of file
+# 文件末尾
+G = "goto_last_line"
+
+# close all
+# 关闭全部
+Z = ":xa!"
+
+# write buffer
+# 保存缓冲区
+s = ":wa!"
+
+# [keys.normal.C-i]
+[keys.normal."tab"]
+tab = ":sh zellij ac new-tab"
+h = ":sh zellij ac new-pane -d down"
+v = ":sh zellij ac new-pane -d right"
+z = ":sh zellij ac toggle-fullscreen"
+
+[keys.normal.space]
+# command mode
+# 命令模式
+space = "command_mode"
+# files in current directory
+# 当前目录文件
+"." = "file_picker_in_current_directory"
+# new scratch buffer
+# 新建临时缓冲
+v = ":vnew"
+# new buffer
+# 新建缓冲
+n = ":new"
+# close buffer
+# 关闭缓冲
+q = ":bc!"
+# write buffer
+# 保存缓冲区
+s = ":wa!"
+# close all
+# 关闭全部
+z = ":xa!"
+# soft wrap
+# 软换行
+Z = ":toggle soft-wrap.enable"
+
+[keys.normal.space.e]
+# Open with emacsclient in a terminal
+# 在终端中使用 emacsclient 打开
+"a" = ":sh st -e emacsclient '%{buffer_name}'"
+# Open with emacsclient in a zellij overlay pane
+# 在 zellij 叠加面板中使用 emacsclient 打开
+"w" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name emacsclient -- emacsclient '%{buffer_name}'"
+# Open with emacsclient in a floating pane
+# 在浮动面板中使用 emacsclient 打开
+"f" = ":pipe-to zqantara --floating --program \"emacsclient '%{buffer_name}'\""
+# Taking note with zk
+# 使用 zk 记录笔记
+n = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/zk.nu\""
+# preview note with glow
+# 用 glow 预览笔记
+p = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/markdown.nu '%{buffer_name}'\""
+
+[keys.normal.space.f]
+# file
+# 文件操作
+# builtin pickers
+# 内置选择器
+"." = "file_picker_in_current_directory"
+f = "file_picker"
+"s" = "symbol_picker"
+# open yazi finder
+# 打开 yazi 查找器
+y = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/yazi.nu\""
+# open nnn finder
+# 打开 nnn 查找器
+n = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/nnn.nu\""
+# open project finder
+# 打开项目查找器
+p = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/project.nu\""
+# terminal
+# 终端
+t = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/terminal.nu\""
+# fuzzy finder
+# 模糊查找器
+"g" = ":pipe-to zellij action new-pane --in-place --close-on-exit --name hx -- rg_hx"
+
+[keys.normal.space.l]
+a = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/ai.nu\""
+h = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/home-manager.nu\""
+r = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/remap.nu\""
+m = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/makefile.nu\""
+j = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/justfile.nu\""
+s = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/sh.nu\""
+t = ":sh zellij action start-or-reload-plugin file:$HOME/.config/zellij/plugins/multitask.wasm --configuration \"shell=bash,ccwd=`pwd`\""
+# tangle file
+# tangle 文件
+g = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/tangle.nu %{buffer_name}\""
+
+[keys.normal.space.b]
+# buffer
+# 缓冲区控制
+b = "buffer_picker"
+n = ":new"
+v = ":vnew"
+h = ":hnew"
+c = ":wbc!"
+o = ":bco!"
+
+[keys.normal.space.c]
+# lsp functions
+# LSP 功能
+a = "code_action"
+r = "rename_symbol"
+f = ":format"
+i = ":toggle lsp.display-inlay-hints"
+s = ":switcheroo"
+
+[keys.normal.space.t]
+# theme
+# 主题
+a = ":theme ayu_light"
+b = ":theme ayu_dark"
+c = ":theme gruvbox_light_hard"
+d = ":theme gruvbox_dark_hard"
+e = ":theme catppuccin_latte"
+f = ":theme catppuccin_mocha"
+o = ":theme onedark"
+p = ":theme onelight"
+t = ":theme tokyonight"
+n = ":theme nord"
+
+[keys.normal.g]
+c = "toggle_comments"
+R = ":reload"
+t = ":new"
+x = ":bc"
+
+[keys.normal."]"]
+"]" = ":config-reload"
+[keys.normal."["]
+"[" = ":config-open"
+
+[keys.normal."\\"]
+# lazy config
+# 懒加载配置
+"=" = ":config-open-workspace"
+"1" = ":cd ~/.config/home-manager"
+"2" = ":cd ~/.config/helix"
+"3" = ":cd ~/.config/zellix"
+"4" = ":cd ~/.config/nnn"
+"5" = ":cd ~/.config/neomutt"
+"6" = ":cd ~/.config/zsh"
+"7" = ":cd ~/.config/yazi"
+"8" = ":cd ~/.config/zk"
+"9" = ":cd ~/.config/oxwm"
+"0" = ":cd ~/.config/opencode"
+"n" = ":cd ~/notebooks"
+"o" = ":cd ~/Org"
+
+# 在标签页中打开
+[keys.normal.space.o]
+g = ":sh zqantara --final-return 0.1 --tab --name lazygit --program lazygit"
+p = ":sh zqantara --final-return 0.1 --tab --name ipython --program 'uv run ipython'"
+a = ":sh zqantara --final-return 0.1 --tab --name opencode --program 'zsh -ic opencode'"
+t = ":sh zqantara --final-return 0.1 --tab --name shell --program zsh"
+
+# Open in floating windows
+# 在浮动窗口中打开
+[keys.normal.space.o.f]
+p = ":sh zqantara --floating --program 'uv run ipython'"
+t = ":sh zqantara --floating --program zsh"
+c = ":sh zqantara --floating --program 'zsh -ic opencode'"
+
+# Open in panes (embedded windows)
+# 在面板中打开（嵌入式窗口）
+[keys.normal.space.o.w]
+t = ":sh zqantara --pane --pos down --program zsh"
+r = ":sh zqantara --pane --pos right --program zsh"
+p = ":sh zqantara --pane --pos down --program ipython"
+a = ":sh zqantara --pane --pos stacked --program 'zsh -ic opencode'"
+
+[keys.normal.space.r]
+# Send to named tabs
+# 发送到指定标签页
+p = ":pipe-to zqantara --final-return 0.1 --tab --name ipython"
+a = ":pipe-to zqantara --final-return 0.1 --tab --name 'zsh -ic opencode'"
+t = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
+
+# Send to floating windows by position
+# 按位置发送到浮动窗口
+# 'current' means use current floating window without switching position
+# “current” 表示在当前浮动窗口停留而不切换位置
+"1" = ":pipe-to zqantara --floating --pos current"
+"2" = ":pipe-to zqantara --floating --pos up"
+"3" = ":pipe-to zqantara --floating --pos down"
+
+# Send to panes by position
+# 按位置发送到面板
+"l" = ":pipe-to zqantara --pane --pos 'down right'"
+"h" = ":pipe-to zqantara --pane --pos 'down left'"
+
+[keys.select.space.r]
+# Send to named tabs
+# 发送到指定标签页
+p = ":pipe-to zqantara --tab --name ipython"
+a = ":pipe-to zqantara --final-return 0.1 --tab --name opencode"
+s = ":pipe-to zqantara --final-return 0.1 --tab --name shell"
+b = ":pipe-to zqantara --floating --program 'bash -s'"
+
+# Send to floating windows by position
+# 按位置发送到浮动窗口
+# 'current' means use current floating window without switching position
+# “current” 表示在当前浮动窗口停留而不切换位置
+"1" = ":pipe-to zqantara --floating --pos current"
+"2" = ":pipe-to zqantara --floating --pos up"
+"3" = ":pipe-to zqantara --floating --pos down"
+
+# Send to panes by position
+# 按位置发送到面板
+"l" = ":pipe-to zqantara --pane --pos 'down right'"
+"h" = ":pipe-to zqantara --pane --pos 'down left'"
+
+[keys.select]
+C-A-space = [
+  ":sh zellij ac move-focus-or-tab right",
+  ":pipe-to sh -c 'rg -v \"^[[:space:]]*$\" | zellij ac write-chars \"$(cat)\n\"'",
+  ":sh zellij ac move-focus-or-tab left",
+  "collapse_selection",
+  "move_visual_line_down",
+  "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode",
+]

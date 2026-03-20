@@ -10,7 +10,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; Picking one from the possible themes is _fine_
-(define possible-themes '("focus_nova"))
+(define possible-themes '("focus_nova" "gruvbox_dark_hard" "tokyonight_storm" "ayu_dark"))
 
 (define (select-random lst)
   (let ([index (rand::rng->gen-range 0 (length lst))]) (list-ref lst index)))
@@ -66,8 +66,8 @@
                  (auto-format #true)
                  (language-servers '("steel-language-server")))
 
-(when (equal? (command-line) '("hxx"))
-  (show-splash))
+; (when (equal? (command-line) '("hxx"))
+;   (show-splash))
 
 ;; Probably should be a symbol?
 ; (register-hook! 'post-insert-char 'prompt-on-char-press)

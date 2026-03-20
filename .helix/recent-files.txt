@@ -1,3 +1,5 @@
-"/home/Designers/.config/helix/AGENTS.md"
-"/home/Designers/.config/helix/init.scm"
 "/home/Designers/.config/helix/config.toml"
+"/home/Designers/.config/helix/tutors/zh_cn"
+"/home/Designers/.config/helix/scripts/ime-switch"
+"/home/Designers/.config/helix/README.md"
+"/home/Designers/.config/helix/init.scm"
