@@ -102,8 +102,10 @@
 ;; TODO: Move this to its own component API - components are pretty compelling to have, but
 ;; require just a tad bit more integration than standard commands
 (provide helix-picker!)
-(define (helix-picker! . pick-list)
-  (push-component! (picker pick-list)))
+;; Avoid steel-core 0.8.2 analysis panic on (define (f . xs) ...) — use rest lambda.
+(define helix-picker!
+  (lambda pick-list
+    (push-component! (picker pick-list))))
 
 ;; I think options might still come through as void?
 (define (unwrap-or obj alt)
@@ -111,15 +113,16 @@
 
 ;;@doc
 ;; Specialized shell - also be able to override the existing definition, if possible.
-(define (expanded-shell . args)
-  ;; Replace the % with the current file
-  (define expanded
-    (map (lambda (x)
-           (if (equal? x "%")
-               (current-path)
-               x))
-         args))
-  (apply helix.run-shell-command expanded))
+(define expanded-shell
+  (lambda args
+    ;; Replace the % with the current file
+    (define expanded
+      (map (lambda (x)
+             (if (equal? x "%")
+                 (current-path)
+                 x))
+           args))
+    (apply helix.run-shell-command expanded)))
 
 ;;@doc
 ;; Get the path of the currently focused file

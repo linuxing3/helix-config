@@ -49,16 +49,17 @@
         #:highlight-prefix "> "
         #:title "Switch project"))))
 
-(define (project-add . args)
-  (if (null? args)
-      (set-error! "Usage: :project-add <path>")
-      (let* ([path (car args)]
-             [projects (read-projects)])
-        (if (member path projects)
-            (set-warning! (string-append "Already exists: " path))
-            (begin
-              (write-projects! (append projects (list path)))
-              (set-status! (string-append "Added project: " path)))))))
+(define project-add
+  (lambda args
+    (if (null? args)
+        (set-error! "Usage: :project-add <path>")
+        (let* ([path (car args)]
+               [projects (read-projects)])
+          (if (member path projects)
+              (set-warning! (string-append "Already exists: " path))
+              (begin
+                (write-projects! (append projects (list path)))
+                (set-status! (string-append "Added project: " path))))))))
 
 (define (project-add-current)
   (let* ([cwd (current-directory)]
