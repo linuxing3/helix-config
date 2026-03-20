@@ -1,2 +1,5 @@
-"/home/Designers/.config/helix/config.toml"
+"/home/Designers/.config/helix/cogs/switchkoo.scm"
 "/home/Designers/.config/helix/init.scm"
+"/home/Designers/.config/helix/config.toml"
+"/home/Designers/ → cd /home/Designers && xplr                                           ▂▄▆█▆▄▂"
+"/home/Designers/ → cd /home/Designers && xplr                                                ▂▄▆█▆▄▂"

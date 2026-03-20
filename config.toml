@@ -186,10 +186,10 @@ workspace-diagnostics = ["warning", "error"]
 [keys.normal]
 
 F1 = ":open-term"
-A-F1 = ":kill-active-terminal"
+A-F1 = ":hide-terminal"
 F2 = "rename_symbol"
 F3 = ":project-add-current"
-F4 = ":project-add %%selection"
+F4 = ":project-add"
 F5 = ":project-switch"
 F6 = ":project-delete"
 F7 = "dap_launch"
@@ -203,12 +203,8 @@ F12 = "goto_implementation"
 tab = "move_parent_node_end"
 S-tab = "move_parent_node_start"
 
-# smart pane/tab/window navigation
-# 智能窗格导航：zellij > kitty/wezterm/ghostty/rio > 窗口管理器
-C-h = ":sh ~/.config/helix/scripts/nav.sh left"
-C-j = ":sh ~/.config/helix/scripts/nav.sh down"
-C-k = ":sh ~/.config/helix/scripts/nav.sh up"
-C-l = ":sh ~/.config/helix/scripts/nav.sh right"
+# C-[hjkl] 窗格导航由 init.scm 中 hx-zellij-navigator（先试 Helix 分屏再 nav.sh）处理。
+# Zellij 全局勿再绑 Ctrl+h/j/k/l，否则按键到不了 Helix — 见 ~/.config/home-manager/configs/zellij/config.kdl
 
 C-A-esc = [
   "goto_first_nonwhitespace",
@@ -325,6 +321,8 @@ O = ["open_above", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&
 "w" = { r = ":reload", c = ":config-reload" }  # 重新加载
 "." = "file_picker_in_current_buffer_directory" # 当前目录文件选择
 "n" = "signature_help"    # 函数签名帮助
+# streal.hx — 工作目录书签 / 数字快速切换
+"B" = ":streal-open"
 
 [keys.normal."]"]
 "]" = ":config-reload"
@@ -434,6 +432,10 @@ S-tab = "move_parent_node_start"
 [keys.select]
 tab = "extend_parent_node_end"
 S-tab = "extend_parent_node_start"
+
+[keys.select.space]
+# streal.hx（与 normal Space b 一致）
+"b" = ":streal-open"
 
 [keys.insert.j]
 j = "normal_mode"

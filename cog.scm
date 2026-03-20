@@ -5,4 +5,6 @@
 ;; helix-file-watcher still disabled (requires separate build)
 (define dependencies '())
 
-(define dylibs '((#:name "steel-pty")))
+(define dylibs '((#:name "steel-pty")
+                 (#:name "steel-nrepl")
+                 (#:name "scooter_hx")))

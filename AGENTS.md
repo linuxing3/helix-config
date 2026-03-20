@@ -142,20 +142,91 @@ Rebuild steel-pty when:
 - `term.scm` is updated from upstream
 - `:open-term` starts failing with `TypeMismatch` errors
 
+### steel-nrepl ([nrepl.hx](https://github.com/waddie/nrepl.hx))
+
+nREPL client for Clojure/Babashka/Python (`:nrepl-connect`, `:nrepl-jack-in`, etc.).
+
+**Build** (Rust via nix-shell; cargo need not be on default `PATH`):
+
+```bash
+git clone --depth 1 https://github.com/waddie/nrepl.hx.git /tmp/nrepl.hx
+cd /tmp/nrepl.hx
+nix-shell -p rustc cargo pkg-config openssl --run "cargo build --release"
+./install.sh
+```
+
+Copy `libsteel_nrepl.so` into `~/.local/share/steel/native/` if you keep other
+dylibs there (upstream `install.sh` also places a copy under `~/.steel/native/`).
+
+### scooter_hx ([scooter.hx](https://github.com/thomasschafer/scooter.hx))
+
+Find-and-replace plugin (`:scooter`, `:scooter-new`). You already have
+`libscooter_hx.so` under `~/.local/share/steel/native/`.
+
+Scheme sources must live where Steel resolves `(require "scooter/scooter.scm")` —
+typically **`~/.steel/cogs/scooter/`** (this repo keeps `scooter/` under the
+Helix config dir and symlinks that path to `~/.steel/cogs/scooter`).
+
+**Update** (clone then copy `scooter.scm` + `ui/` into `scooter/`):
+
+```bash
+git clone --depth 1 https://github.com/thomasschafer/scooter.hx.git /tmp/scooter.hx
+cp /tmp/scooter.hx/scooter.scm ~/.config/helix/scooter/scooter.scm
+cp -r /tmp/scooter.hx/ui ~/.config/helix/scooter/
+```
+
+Or: `forge pkg install --git https://github.com/thomasschafer/scooter.hx.git`
+(if you use Forge).
+
+### streal.hx ([streal.hx](https://github.com/gllms/streal.hx))
+
+Bookmark files per working directory and jump by number (`:streal-open`). Pure
+Scheme — no dylib; nothing to add to `cog.scm`.
+
+Keep `streal/streal.scm` under this Helix config (same layout as upstream’s
+`(require "streal/streal.scm")`).
+
+**Update** (clone then copy `streal.scm`):
+
+```bash
+git clone --depth 1 https://github.com/gllms/streal.hx.git /tmp/streal.hx
+cp /tmp/streal.hx/streal.scm ~/.config/helix/streal/streal.scm
+```
+
+Or: `forge pkg install --git https://github.com/gllms/streal.hx.git`
+
+### Helix ↔ Zellij navigation (hx-tmux-navigator style)
+
+[hx-tmux-navigator](https://github.com/piotrkwarcinski/hx-tmux-navigator) jumps inside
+Helix first (`jump_view_*`), then delegates to tmux. This config uses the same pattern
+in `cogs/hx-zellij-navigator.scm`, but the outer step runs `scripts/nav.sh` so **Zellij**
+(`zellij ac move-focus-or-tab`) and your other fallbacks (Kitty, Wezterm, oxwm, …) still work.
+
+**Zellij**: do **not** bind `Ctrl+h/j/k/l` in `shared_except` (or any mode that should
+forward keys to Helix). Those bindings were commented out in
+`~/.config/home-manager/configs/zellij/config.kdl` — run `home-manager switch` so
+`~/.config/zellij/config.kdl` updates. Use **Locked** mode (`Alt+z` in this config) or
+Zellij’s pane/tab modes when you need multiplexer-only navigation without involving Helix.
+
 ### cog.scm
 
-`cog.scm` declares which dylibs this config uses. After building
-steel-pty, ensure it contains:
+`cog.scm` declares which dylibs this config uses. It should list every dylib
+you load, for example:
 
 ```scheme
-(define dylibs '((#:name "steel-pty")))
+(define dylibs '((#:name "steel-pty")
+                 (#:name "steel-nrepl")
+                 (#:name "scooter_hx")))
 ```
 
 ### Dylib search path
 
-Steel looks for `.so` files in (order):
+Steel / Helix look for `.so` files in (order may vary by build):
 1. `~/.local/share/steel/native/`
-2. `$STEEL_HOME/native/` (nix profile: `~/.nix-profile/lib/steel/native/`)
+2. `~/.steel/native/` (used by several plugin `install.sh` scripts; if you see
+   `dylib not found: libscooter_hx` while the file exists under `.local/share`,
+   copy or symlink the `.so` here as well)
+3. `$STEEL_HOME/native/` (nix profile: `~/.nix-profile/lib/steel/native/`)
 
 ## Notes for agents
 
