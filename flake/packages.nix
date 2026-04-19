@@ -1,4 +1,4 @@
-{ inputs, nixpkgs, ... }:
+{ inputs, ... }:
 {
   perSystem =
     { system, ... }:
@@ -17,7 +17,7 @@
           });
         })
       ];
-      pkgs = import nixpkgs {
+      pkgs = import inputs.nixpkgs {
         inherit system;
         config = {
           allowUnfree = true;

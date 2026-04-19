@@ -10,15 +10,16 @@
   };
 
   outputs =
-    inputs@{
-      flake-parts,
-      ...
-    }:
-    flake-parts.lib.mkFlake { inherit inputs; } {
+    inputs:
+    let
+      supportedSystems = [ "aarch64-linux" ];
+    in
+    inputs.flake-parts.lib.mkFlake { inherit inputs; } {
       imports = [
         ./flake/devshells.nix
         ./flake/packages.nix
       ];
+      systems = supportedSystems;
     };
 
 }

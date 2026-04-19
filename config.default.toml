@@ -1,0 +1,462 @@
+# Helix 编辑器配置文件
+# https://docs.helix-editor.com/
+
+# 使用自定义发布版本
+# https://github.com/erasin/helix
+theme = "onedark"
+
+[editor]
+# enable-steel = true
+# ==================== 基础显示 ====================
+# 真彩支持 (需终端支持: export COLORTERM=truecolor)
+true-color = true
+# 下划线支持 (需终端支持)
+undercurl = true
+
+# ==================== 自动补全 ====================
+auto-completion = true
+auto-info = true
+
+# ==================== 光标与高亮 ====================
+cursorline = true  # 光标所在行高亮
+color-modes = true # 多光标模式着色
+
+# ==================== 超时与滚动 ====================
+idle-timeout = 40  # 空闲超时时间(秒)
+# scrolloff = 5    # 滚动时上下边缘保留行数
+# scroll-lines = 3 # 滚动行数
+
+# ==================== 行号与标尺 ====================
+# line-number = "relative" # absolute(绝对行号) / relative(相对行号)
+# rulers = [81, 121]     # 标尺线列位置
+
+# ==================== 文本宽度 ====================
+# text-width = 80        # 文本宽度，用于自动换行
+# wrap-at-text-width = true # 在 text-width 处换行
+
+# ==================== 行尾诊断 ====================
+end-of-line-diagnostics = "hint" # none/hint/info/warning/error
+
+# ==================== 命令行 ====================
+# [#11223] 隐藏底部命令行
+# commandline = false
+
+# ==================== 括号彩虹 ====================
+# [#13530] 彩色括号配对显示
+# rainbow-brackets = true
+
+# ==================== 自动保存 ====================
+# auto-save = false      # 自动保存
+# bufferline = "multiple" # always | multiple | never
+
+# ==================== 软换行 ====================
+[editor.soft-wrap]
+enable = true
+# max-wrap = 20          # 最大换行次数
+# max-indent-retain = 40 # 保持缩进的最大列
+# wrap-indicator = "↪ " # 换行指示符
+
+# ==================== 单词补全 ====================
+# [editor.word-completion]
+# enable = true
+# trigger-length = 4
+
+# ==================== 行内 Git Blame ====================
+# [#13133] 行内 Git  blame 显示
+# [editor.inline-blame]
+# show = "cursor-line"   # none/hover/cursor-line
+# auto-fetch = true     # 自动获取 blame 信息
+
+# ==================== 光标形状 ====================
+[editor.cursor-shape]
+insert = "bar"        # 插入模式: bar/beam/block
+normal = "block"      # 普通模式: block
+select = "underline"  # 选择模式: underline/block
+
+# ==================== LSP 配置 ====================
+[editor.lsp]
+display-messages = true      # 显示 LSP 消息
+display-progress-messages = true  # 显示进度消息
+display-inlay-hints = false # 显示内联提示
+# inlay-hints-length-limit = 40 # 内联提示长度限制
+
+# ==================== 行内诊断 ====================
+[editor.inline-diagnostics]
+cursor-line = "disable"  # disable/hint/info/warning/error
+
+# ====================空白字符渲染 ====================
+[editor.whitespace.render]
+# space = "all"  # 显示空格
+# tab = "all"      # 显示制表符
+# newline = "all" # 显示换行符
+
+# ==================== 缩进 guides ====================
+[editor.indent-guides]
+render = false          # 渲染缩进 guides
+character = "╎"        # 缩进字符 (可选: ▏, ╎, ┆, ┊)
+skip-levels = 0        # 跳过的缩进级别
+
+# ==================== 状态栏 ====================
+[editor.statusline]
+left = [
+  "mode",                        # 编辑模式
+  "version-control",             # Git 状态
+  "read-only-indicator",         # 只读标识
+  "file-name",                   # 文件名
+  "file-modification-indicator", # 修改状态
+]
+center = ["diagnostics"]         # 诊断信息
+right = [
+  "register",                    # 寄存器
+  "position",                    # 光标位置
+  "primary-selection-length",   # 主选区长度
+  "selections",                  # 选区数量
+  # 'word-count',                  # 字数统计
+  "file-encoding",               # 文件编码
+  "file-indent-style",           # 缩进风格
+  "file-line-ending",            # 行尾符号
+  "position-percentage",         # 文件位置百分比
+  "file-type",                   # 文件类型
+  "spacer"                       # 空白分隔
+]
+# separator = "│"                # 分隔符
+
+# 模式指示符图标
+mode.normal = " "
+mode.insert = " "
+mode.select = " "
+
+# 诊断信息过滤
+diagnostics = ["warning", "error"]
+workspace-diagnostics = ["warning", "error"]
+
+# ==================== 文件浏览器 (Explorer) ====================
+# [#5768] 文件目录树
+# 快捷键: Space + e 打开
+# [editor.explorer]
+# position = "left"    # left/right
+# column-width = 22    # 列宽度
+
+# # ==================== 图标配置 ====================
+# # [#12369] Icons v2
+# # 需要 Nerd Fonts 字体支持
+# [icons.vcs]
+# enabled = true
+
+# [icons.kind]
+# enabled = true
+# number = ""
+# string = ""
+# function = "󰊕"
+# color = "󰌁"
+
+# # 文件类型图标
+# [icons.fs]
+# enabled = true
+# php = { glyph = "", color = "#1976D2" }
+# godot = { glyph = "", color = "#2196F3" }
+# gd = { glyph = "", color = "#2196F3" }
+# gdshader = { glyph = "󰘷", color = "#9C27B0" }
+# wgsl = { glyph = "", color = "#E06C75" }
+# wesl = { glyph = "", color = "#E06C75" }
+# cj = ""
+# yml = ""
+# yaml = ""
+# conf = ""
+# kdl = ""
+# Makefile = ""
+# ron = "󰔘"
+# db = ""
+# sql = "󰆼"
+# jsonc = ""
+# json5 = ""
+# "ignore" = "󰈉"
+# ".ignore" = "󰈉"
+# "lrc" = "󰨖"
+# "env" = ""
+# "hurl" = { glyph = "", color = "#DE3163" }
+
+# # 诊断图标
+# [icons.diagnostic]
+# error = " "
+# warning = " "
+# info = ""
+# hint = "󰮥 "
+
+# ==================== 键盘快捷键 ====================
+[keys.normal]
+
+# "F1" = ":open-term"
+# A-F1 = ":kill-active-terminal"
+# S-F1 = ":codex-term"
+
+F2 = "rename_symbol"
+
+# LazyGit
+# 需要安装: https://github.com/jesseduffield/lazygit
+F3 = [
+  ":new",
+  ":insert-output lazygit >/dev/tty",
+  ":buffer-close!",
+  ":redraw",
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+# nnn 文件选择器
+# 需要安装: https://github.com/jarun/nnn
+# 打开 nnn 时以当前文件目录为起点，选中文件后 cd 到该文件所在目录
+F4 = [
+  ':insert-output ~/.config/helix/scripts/nnn-pick.sh "%{buffer_name}"',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/hx-nnn-pick}',
+  ':cd %sh{dirname "$(cat /tmp/hx-nnn-pick)"}',
+  ':redraw',
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+F5 = [
+  ':sh st',
+]
+F6 = [
+  ':sh st -e "zsh -lc ~/.local/bin/ads start"',
+]
+F7 = "dap_launch"
+F8 = "dap_continue"
+F9 = "dap_step_in"
+F10 = "dap_step_out"
+F11 = "goto_definition"
+F12 = "goto_implementation"
+
+# Tab 智能缩进
+tab = "move_parent_node_end"
+S-tab = "move_parent_node_start"
+
+# multi selection
+# 多重选择
+C-m = [
+  "move_prev_word_start",
+  "move_next_word_end",
+  "search_selection",
+  "select_mode",
+]
+
+# line start and end
+# 行首行尾操作
+"$" = ["split_selection_on_newline", "insert_at_line_end", "normal_mode"]
+"0" = ["split_selection_on_newline", "insert_at_line_start", "normal_mode"]
+
+# extend_line_below and up
+# 向下/向上扩展行
+"S-A-up" = [
+  "move_visual_line_up",
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+  "move_visual_line_up",
+]
+"S-A-down" = [
+  "extend_line_below",
+  "delete_selection",
+  "paste_after",
+  "collapse_selection",
+]
+
+# duplicate
+# 复制当前行
+"C-A-d" = ["extend_line_below", "yank", "paste_after", "collapse_selection"]
+
+# delete line
+# 删除整行
+U = "kill_to_line_start"
+D = "kill_to_line_end"
+
+# comments
+# 注释操作
+"C-/" = "toggle_comments"
+
+# indent
+# 缩进控制
+"C-]" = "indent"
+"C-[" = "unindent"
+
+# ==================== 常用操作 ====================
+"\\" = ":reflow"         # 重新格式化段落
+
+# 大写 X 选择整行
+"X" = ["extend_line_up", "extend_to_line_bounds"]
+
+# 保存相关
+"C-s" = ":write"          # 保存
+"C-'" = "save_selection"  # 保存选区
+
+"A-/" = "toggle_comments"  # 切换注释
+
+# 退出与软换行
+"Z" = { "Z" = [":quit"] } # 保存退出
+"z" = { "o" = [":toggle soft-wrap.wrap-at-text-width"] }
+
+# ==================== 输入法切换 ====================
+# Esc 退出插入模式时切换到英文
+"esc" = ["normal_mode", ":sh bash ~/.config/helix/scripts/ime-switch >/dev/null 2>&1"]
+
+# 插入模式进入时切换到英文
+i = ["insert_mode", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
+I = ["insert_at_line_start", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
+
+# a/A 保持进入插入模式时切换英文
+a = [
+  "move_char_right",
+  "insert_mode",
+  ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1",
+]
+A = ["insert_at_line_end", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
+
+# o/O 打开新行时切换英文
+o = ["open_below", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
+O = ["open_above", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&1"]
+
+# ==================== Space 模式 ====================
+[keys.normal.space]
+"x" = ":buffer-close"     # 关闭当前缓冲区
+"X" = ":buffer-close-others!"     # 关闭当前缓冲区
+"w" = { r = ":reload", c = ":config-reload" }  # 重新加载
+"." = "file_picker_in_current_buffer_directory" # 当前目录文件选择
+"n" = "signature_help"    # 函数签名帮助
+# streal.hx — 工作目录书签 / 数字快速切换
+# "B" = ":streal-open"
+
+[keys.normal."]"]
+"]" = ":config-reload"
+[keys.normal."["]
+"[" = ":config-open"
+
+[keys.normal.space.c]
+# lsp functions
+# LSP 功能
+a = "code_action"
+r = "rename_symbol"
+f = ":format"
+i = ":toggle lsp.display-inlay-hints"
+# s = ":switcheroo"
+c = ":sh st -e ads init && ads start >/dev/null 2>&1 &"
+k = ":sh xmodmap ~/.Xmodmap >/dev/null 2>&1 &"
+
+[keys.normal.space.t]
+# theme
+# 主题
+a = ":theme ayu_light"
+b = ":theme ayu_dark"
+c = ":theme gruvbox_light_hard"
+d = ":theme gruvbox_dark_hard"
+e = ":theme catppuccin_latte"
+f = ":theme catppuccin_mocha"
+o = ":theme onedark"
+p = ":theme onelight"
+t = ":theme tokyonight"
+n = ":theme nord"
+
+[keys.normal.g]
+c = "toggle_comments"
+R = ":reload"
+t = ":new"
+x = ":bc"
+
+# ==================== 外部程序集成 ====================
+[keys.normal.space.p]
+
+# Scooter 全局搜索
+# 需要安装: https://github.com/thomahttps://github.com/thomasschafer/scooter.hxsschafer/scooter
+s = [
+  ":write-all",
+  ":insert-output scooter --no-stdin >/dev/tty",
+  ":redraw",
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+
+# LazyGit
+# 需要安装: https://github.com/jesseduffield/lazygit
+g = [
+  ":new",
+  ":insert-output lazygit >/dev/tty",
+  ":buffer-close!",
+  ":redraw",
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+
+# Yazi 文件浏览器
+# 需要安装: https://github.com/sxyazi/yazi
+e = [
+  ':sh rm -f /tmp/unique-file',
+  ':insert-output yazi "%{buffer_name}" --chooser-file=/tmp/unique-file',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/unique-file}',
+  ':redraw',
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+
+# nnn 文件选择器
+# 需要安装: https://github.com/jarun/nnn
+# 打开 nnn 时以当前文件目录为起点，选中文件后 cd 到该文件所在目录
+n = [
+  ':insert-output ~/.config/helix/scripts/nnn-pick.sh "%{buffer_name}"',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/hx-nnn-pick}',
+  ':cd %sh{dirname "$(cat /tmp/hx-nnn-pick)"}',
+  ':redraw',
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+
+# 项目管理
+# Space p p = 切换项目 | Space p a = 添加当前项目 | Space p d = 删除项目
+# Space p s = 扫描当前目录下的 git 子目录并添加
+# p = ":project-switch"
+# a = ":project-add-current"
+# d = ":project-delete"
+# b = ":project-discover"
+
+# ==================== 插入模式快捷键 ====================
+[keys.insert]
+# Tab 智能缩进
+S-tab = "move_parent_node_start"
+
+# Esc 退出时切换英文
+"esc" = ["normal_mode", ":sh bash ~/.config/helix/scripts/ime-switch >/dev/null 2>&1"]
+
+# 保持插入时在屏幕中间 (用于 zen mode)
+# "ret" = ["insert_newline", 'align_view_center']
+
+# ==================== 选择模式快捷键 ====================
+[keys.select]
+tab = "extend_parent_node_end"
+S-tab = "extend_parent_node_start"
+# "C-A-esc" = [
+#   ":term-send-selection-to-active-terminal",
+#   "collapse_selection",
+#   "normal_mode",
+# ]
+
+[keys.select.space]
+# streal.hx（与 normal Space b 一致）
+# "b" = ":streal-open"
+
+[keys.insert.j]
+j = "normal_mode"
+
+# ==================== 其他可选配置 ====================
+# [editor.sticky-context]
+# enable = true
+# max-lines = 10
+
+[editor.gutters]
+layout = ["diagnostics", "spacer", "line-numbers", "spacer", "diff"]
