@@ -6,6 +6,7 @@
 theme = "onedark_hard"
 
 [editor]
+enable-steel = true
 # ==================== 基础显示 ====================
 # 真彩支持 (需终端支持: export COLORTERM=truecolor)
 true-color = true
@@ -76,22 +77,22 @@ select = "underline"  # 选择模式: underline/block
 [editor.lsp]
 display-messages = true      # 显示 LSP 消息
 display-progress-messages = true  # 显示进度消息
-display-inlay-hints = true   # 显示内联提示
+display-inlay-hints = false # 显示内联提示
 # inlay-hints-length-limit = 40 # 内联提示长度限制
 
 # ==================== 行内诊断 ====================
 [editor.inline-diagnostics]
-cursor-line = "hint"  # none/hint/info/warning/error
+cursor-line = "disable"  # disable/hint/info/warning/error
 
 # ====================空白字符渲染 ====================
 [editor.whitespace.render]
 # space = "all"  # 显示空格
-tab = "all"      # 显示制表符
+# tab = "all"      # 显示制表符
 # newline = "all" # 显示换行符
 
 # ==================== 缩进 guides ====================
 [editor.indent-guides]
-render = true          # 渲染缩进 guides
+render = false          # 渲染缩进 guides
 character = "╎"        # 缩进字符 (可选: ▏, ╎, ┆, ┊)
 skip-levels = 0        # 跳过的缩进级别
 
@@ -185,13 +186,42 @@ workspace-diagnostics = ["warning", "error"]
 # ==================== 键盘快捷键 ====================
 [keys.normal]
 
-F1 = ":open-term"
-A-F1 = ":hide-terminal"
+"F1" = ":open-term"
+A-F1 = ":kill-active-terminal"
+S-F1 = ":codex-term"
+
 F2 = "rename_symbol"
-F3 = ":project-add-current"
-F4 = ":project-add"
-F5 = ":project-switch"
-F6 = ":project-delete"
+
+# LazyGit
+# 需要安装: https://github.com/jesseduffield/lazygit
+F3 = [
+  ":new",
+  ":insert-output lazygit >/dev/tty",
+  ":buffer-close!",
+  ":redraw",
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+# nnn 文件选择器
+# 需要安装: https://github.com/jarun/nnn
+# 打开 nnn 时以当前文件目录为起点，选中文件后 cd 到该文件所在目录
+F4 = [
+  ':insert-output ~/.config/helix/scripts/nnn-pick.sh "%{buffer_name}"',
+  ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
+  ':open %sh{cat /tmp/hx-nnn-pick}',
+  ':cd %sh{dirname "$(cat /tmp/hx-nnn-pick)"}',
+  ':redraw',
+  ":reload-all",
+  ':set mouse false',
+  ':set mouse true',
+]
+F5 = [
+  ':sh st',
+]
+F6 = [
+  ':sh st -e "zsh -lc ~/.local/bin/ads start"',
+]
 F7 = "dap_launch"
 F8 = "dap_continue"
 F9 = "dap_step_in"
@@ -202,33 +232,6 @@ F12 = "goto_implementation"
 # Tab 智能缩进
 tab = "move_parent_node_end"
 S-tab = "move_parent_node_start"
-
-# C-[hjkl] 窗格导航由 init.scm 中 hx-zellij-navigator（先试 Helix 分屏再 nav.sh）处理。
-# Zellij 全局勿再绑 Ctrl+h/j/k/l，否则按键到不了 Helix — 见 ~/.config/home-manager/configs/zellij/config.kdl
-
-C-A-esc = [
-  "goto_first_nonwhitespace",
-  "select_mode",
-  "extend_to_line_end",
-  ":sh zellij ac move-focus-or-tab right >/dev/null 2>&1",
-  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\" >/dev/null 2>&1'",
-  ":sh zellij ac move-focus-or-tab left >/dev/null 2>&1",
-  "move_visual_line_down",
-  "goto_first_nonwhitespace",
-  "collapse_selection",
-  "normal_mode",
-]
-C-A-space = [
-  "select_mode",
-  "extend_to_line_bounds",
-  ":sh zellij ac move-focus-or-tab right >/dev/null 2>&1",
-  ":pipe-to sh -c 'zellij ac write-chars \"$(cat)\n\" >/dev/null 2>&1'",
-  ":sh zellij ac move-focus-or-tab left >/dev/null 2>&1",
-  "move_visual_line_down",
-  "goto_first_nonwhitespace",
-  "collapse_selection",
-  "normal_mode",
-]
 
 # multi selection
 # 多重选择
@@ -318,6 +321,7 @@ O = ["open_above", ":sh bash ~/.config/helix/scripts/ime-switch 1 >/dev/null 2>&
 # ==================== Space 模式 ====================
 [keys.normal.space]
 "x" = ":buffer-close"     # 关闭当前缓冲区
+"X" = ":buffer-close-others!"     # 关闭当前缓冲区
 "w" = { r = ":reload", c = ":config-reload" }  # 重新加载
 "." = "file_picker_in_current_buffer_directory" # 当前目录文件选择
 "n" = "signature_help"    # 函数签名帮助
@@ -337,7 +341,8 @@ r = "rename_symbol"
 f = ":format"
 i = ":toggle lsp.display-inlay-hints"
 s = ":switcheroo"
-c = ":sh st -e zellij -l cursor-nnn >/dev/null 2>&1 &"
+c = ":sh st -e ads init && ads start >/dev/null 2>&1 &"
+k = ":sh xmodmap ~/.Xmodmap >/dev/null 2>&1 &"
 
 [keys.normal.space.t]
 # theme
@@ -380,6 +385,7 @@ g = [
   ":insert-output lazygit >/dev/tty",
   ":buffer-close!",
   ":redraw",
+  ":reload-all",
   ':set mouse false',
   ':set mouse true',
 ]
@@ -392,6 +398,7 @@ e = [
   ':sh printf "\x1b[?1049h\x1b[?2004h" > /dev/tty',
   ':open %sh{cat /tmp/unique-file}',
   ':redraw',
+  ":reload-all",
   ':set mouse false',
   ':set mouse true',
 ]
@@ -405,6 +412,7 @@ n = [
   ':open %sh{cat /tmp/hx-nnn-pick}',
   ':cd %sh{dirname "$(cat /tmp/hx-nnn-pick)"}',
   ':redraw',
+  ":reload-all",
   ':set mouse false',
   ':set mouse true',
 ]
@@ -432,6 +440,11 @@ S-tab = "move_parent_node_start"
 [keys.select]
 tab = "extend_parent_node_end"
 S-tab = "extend_parent_node_start"
+"C-A-esc" = [
+  ":term-send-selection-to-active-terminal",
+  "collapse_selection",
+  "normal_mode",
+]
 
 [keys.select.space]
 # streal.hx（与 normal Space b 一致）

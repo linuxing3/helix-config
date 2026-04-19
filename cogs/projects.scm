@@ -12,15 +12,25 @@
 ;; Capture helix config dir at load time before any :cd changes it
 (define *helix-config-dir* (current-directory))
 
-(define PROJECTS-FILE
-  (let ([dir (string-append *helix-config-dir* "/.helix")])
-    (unless (path-exists? dir)
-      (create-directory! dir))
-    (string-append dir "/projects.txt")))
+(define (home-dir)
+  (canonicalize-path "~"))
 
-(define (read-projects)
-  (if (path-exists? PROJECTS-FILE)
-      (let ([content (call-with-input-file PROJECTS-FILE
+(define USER-PROJECTS-DIR
+  (string-append (home-dir) "/.helix"))
+
+(define USER-PROJECTS-FILE
+  (string-append USER-PROJECTS-DIR "/projects.txt"))
+
+(define FALLBACK-PROJECTS-FILE
+  (string-append *helix-config-dir* "/.helix/projects.txt"))
+
+(define (ensure-user-projects-dir!)
+  (unless (path-exists? USER-PROJECTS-DIR)
+    (create-directory! USER-PROJECTS-DIR)))
+
+(define (read-projects-file file)
+  (if (path-exists? file)
+      (let ([content (call-with-input-file file
                        (lambda (f) (read-port-to-string f)))])
         (if (equal? content "")
             '()
@@ -28,8 +38,21 @@
                     (split-many content "\n"))))
       '()))
 
+(define (read-projects)
+  (define (merge-projects projects)
+    (let loop ([remaining projects] [merged '()])
+      (if (null? remaining)
+          (reverse merged)
+          (let ([project (car remaining)])
+            (if (member project merged)
+                (loop (cdr remaining) merged)
+                (loop (cdr remaining) (cons project merged)))))))
+  (merge-projects (append (read-projects-file USER-PROJECTS-FILE)
+                          (read-projects-file FALLBACK-PROJECTS-FILE))))
+
 (define (write-projects! projects)
-  (call-with-port (open-output-file PROJECTS-FILE #:exists 'truncate)
+  (ensure-user-projects-dir!)
+  (call-with-port (open-output-file USER-PROJECTS-FILE #:exists 'truncate)
                   (lambda (out)
                     (for-each (lambda (p)
                                 (display p out)
@@ -54,32 +77,40 @@
     (if (null? args)
         (set-error! "Usage: :project-add <path>")
         (let* ([path (car args)]
-               [projects (read-projects)])
+               [projects (read-projects)]
+               [user-projects (read-projects-file USER-PROJECTS-FILE)])
           (if (member path projects)
               (set-warning! (string-append "Already exists: " path))
               (begin
-                (write-projects! (append projects (list path)))
+                (write-projects! (append user-projects (list path)))
                 (set-status! (string-append "Added project: " path))))))))
 
 (define (project-add-current)
   (let* ([cwd (current-directory)]
-         [projects (read-projects)])
+         [projects (read-projects)]
+         [user-projects (read-projects-file USER-PROJECTS-FILE)])
     (if (member cwd projects)
         (set-warning! (string-append "Already exists: " cwd))
         (begin
-          (write-projects! (append projects (list cwd)))
+          (write-projects! (append user-projects (list cwd)))
           (set-status! (string-append "Added: " cwd))))))
 
 (define (project-delete)
   (define projects (read-projects))
+  (define user-projects (read-projects-file USER-PROJECTS-FILE))
   (if (null? projects)
       (set-error! "No projects to delete")
       (push-component!
        (picker-selection
         projects
         (lambda (selected)
-          (write-projects! (filter (lambda (p) (not (equal? p selected))) projects))
-          (set-status! (string-append "Removed: " selected)))
+          (if (member selected user-projects)
+              (begin
+                (write-projects! (filter (lambda (p) (not (equal? p selected)))
+                                         user-projects))
+                (set-status! (string-append "Removed: " selected)))
+              (set-warning! (string-append "Cannot remove fallback project: "
+                                           selected))))
         #:highlight-prefix "x "
         #:title "Delete project"))))
 
@@ -92,11 +123,12 @@
       (set-error! (string-append "Not a directory: " parent))
       (let* ([git-dirs (find-git-subdirs parent)]
              [existing (read-projects)]
-             [new-dirs (filter (lambda (d) (not (member d existing))) git-dirs)])
+             [new-dirs (filter (lambda (d) (not (member d existing))) git-dirs)]
+             [user-projects (read-projects-file USER-PROJECTS-FILE)])
         (if (null? new-dirs)
             (set-status! "No new git projects found")
             (begin
-              (write-projects! (append existing new-dirs))
+              (write-projects! (append user-projects new-dirs))
               (set-status! (string-append "Added "
                                           (number->string (length new-dirs))
                                           " projects from "

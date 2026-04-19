@@ -1,5 +1,52 @@
 # Learnings
 
+## [LRN-20260326-001] bug_fix
+
+**Logged**: 2026-03-26T00:00:00-03:00
+**Priority**: high
+**Status**: resolved
+
+### Summary
+`term.scm` startup commands can lose their first character when sent to a fresh
+PTY byte-by-byte.
+
+### Details
+`default-on-start-function` opens the embedded terminal by running:
+
+```scheme
+(pty-process-run-line! pty (string-append "cd -- " workspace))
+(pty-process-run-line! pty "clear")
+```
+
+`pty-process-run-line!` previously called `pty-process-type!`, which loops over
+the string and writes each character individually via
+`pty-process-send-command-char`, then sends `"\r"` separately.
+
+On a newly created PTY this can race with shell startup and drop the first
+character of the command, so `cd -- ...` arrives as `d -- ...`.
+
+### Resolution
+- Change `pty-process-run-line!` to send the entire command plus trailing
+  carriage return in a single `pty-process-send-command` call:
+  ```scheme
+  (pty-process-send-command pty (string-append text "\r"))
+  ```
+- Delay bootstrap commands with `enqueue-thread-local-callback-with-delay` so
+  `cd`/`clear` and `xplr` are injected after shell startup.
+- Run the embedded terminal through a dedicated wrapper that executes
+  `/bin/zsh -f -i`, keeping zsh interactive while skipping user rc files, so
+  startup hooks like `compinit`, `direnv`, and `direnv allow` prompts cannot
+  block the PTY before the bootstrap command runs.
+- Keep `pty-process-type!` for interactive character input, but avoid it for
+  startup/bootstrap commands.
+
+### Metadata
+- Source: debugging
+- Related Files: `term.scm`
+- Tags: steel-pty, helix, terminal, pty, startup, race-condition
+
+---
+
 ## [LRN-20260319-001] best_practice
 
 **Logged**: 2026-03-19T19:54:00+08:00

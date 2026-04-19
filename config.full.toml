@@ -164,6 +164,11 @@ F6 = ":sh zqantara --floating --final-return 0.1 --program \"nu $ZELLIX_MOD/proj
 
 C-F5 = ":open-term"
 C-F6 = ":kill-active-term"
+"C-`" = [
+  ":term-send-selection-to-active-terminal",
+  "collapse_selection",
+  "normal_mode",
+]
 
 # debug
 # 调试命令
@@ -491,6 +496,11 @@ C-A-space = [
   "collapse_selection",
   "move_visual_line_down",
   "goto_first_nonwhitespace",
+  "collapse_selection",
+  "normal_mode",
+]
+"C-`" = [
+  ":term-send-selection-to-active-terminal",
   "collapse_selection",
   "normal_mode",
 ]

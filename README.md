@@ -114,6 +114,14 @@ cargo install --git https://github.com/mattwparas/steel.git steel-forge
 forge install
 ```
 
+For this repo specifically, also see [doc/steel-integration.md](doc/steel-integration.md).
+The Scheme side is already configured in-tree; the remaining setup is the local
+Steel runtime layout and the native libraries declared in `cog.scm`.
+
+```bash
+./scripts/setup-steel-integration.sh
+```
+
 ## Vim Emulation
 
 The `vim/` directory provides a nearly complete Vim motion layer:

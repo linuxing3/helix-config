@@ -1,0 +1,3 @@
+#!/bin/sh
+# Embedded terminal shell: interactive zsh without user rc hooks.
+exec /bin/zsh -f -i

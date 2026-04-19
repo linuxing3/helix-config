@@ -5,6 +5,8 @@
 (require (prefix-in helix. "helix/commands.scm"))
 
 (require "helix/editor.scm")
+(require (prefix-in helix.static. "helix/static.scm"))
+(require "cogs/picker.scm")
 
 ;; Pull in all of the functions from the dylib.
 ;; See steel-pty for the definitions
@@ -58,18 +60,20 @@
          kill-active-terminal
          switch-term
          term-resize
+         term-send-selection-to-active-terminal
          (contract/out set-default-terminal-cols! (->/c int? void?))
          (contract/out set-default-terminal-rows! (->/c int? void?))
          (contract/out set-default-shell! (->/c string? void?))
          xplr
          open-debug-window
          close-debug-window
-         hide-terminal)
+         hide-terminal
+         codex-term)
 
 (define *default-terminal-rows* 45)
 
 ;; Use this for the width, rows is going to be the default
-(define *default-terminal-cols* 85)
+(define *default-terminal-cols* 160)
 
 (define (set-default-terminal-rows! rows)
   (set! *default-terminal-rows* rows)
@@ -79,11 +83,89 @@
   (set! *default-terminal-cols* cols)
   void)
 
-(define *default-shell* "/bin/zsh")
+(define *default-shell* "/home/Designers/.config/helix/scripts/hx-term-shell")
 
 (define (set-default-shell! path-to-shell)
   (set! *default-shell* path-to-shell)
   void)
+
+(define (terminal-workspace-command startup-command)
+  (define workspace (helix-find-workspace))
+  (define base-command (string-append "cd -- " workspace " && clear"))
+
+  (if (or (not startup-command) (equal? startup-command ""))
+      base-command
+      (string-append base-command " && " startup-command)))
+
+(define (terminal-startup-function startup-command)
+  (lambda (terminal)
+    (define pty (Terminal-*pty-process* terminal))
+    (pty-process-run-line-after-delay!
+     pty
+     (terminal-workspace-command startup-command)
+     *startup-command-delay-ms*)))
+
+(define (terminal-choice-label choice)
+  (car choice))
+
+(define (terminal-choice-command choice)
+  (cdr choice))
+
+(define *terminal-launch-choices*
+  (list (cons "plain shell" "zsh")
+        (cons "direnv allow" "direnv allow")
+        (cons "codex" "codex")
+        (cons "lazygit" "lazygit")
+        (cons "nnn" "nnn")
+        (cons "just build" "just build")
+        (cons "just run" "just run")
+        (cons "nix build" "nix build")
+        (cons "nix run" "nix run")
+        (cons "nix repl" "nix repl")))
+
+(define (make-terminal-from-choice choice)
+  (make-terminal (string-append "Terminal-"
+                                (int->string (length (TerminalRegistry-terminals *terminal-registry*))))
+                 *default-shell*
+                 *default-terminal-rows*
+                 *default-terminal-cols*
+                 (terminal-startup-function (terminal-choice-command choice))
+                 vte/advance-bytes))
+
+(define (register-terminal! terminal)
+  (set-TerminalRegistry-terminals! *terminal-registry*
+                                   (cons terminal (TerminalRegistry-terminals *terminal-registry*)))
+  (set-TerminalRegistry-cursor! *terminal-registry* 0)
+  (show-term terminal))
+
+(define (open-terminal-picker)
+  (push-component!
+   (picker-selection
+    *terminal-launch-choices*
+    (lambda (choice)
+      (register-terminal! (make-terminal-from-choice choice)))
+    #:value-formatter terminal-choice-label
+    #:highlight-prefix "> "
+    #:title "Open terminal")))
+
+(define (pty-process-type! pty text)
+  (for-each
+   (lambda (char)
+     (pty-process-send-command-char pty char))
+   (string->list text)))
+
+(define (pty-process-run-line! pty text)
+  ;; Startup commands sent immediately after PTY creation can lose the first
+  ;; byte when emitted char-by-char. Send the full line in one write instead.
+  (pty-process-send-command pty (string-append text "\r")))
+
+(define *startup-command-delay-ms* 300)
+
+(define (pty-process-run-line-after-delay! pty text delay-ms)
+  (enqueue-thread-local-callback-with-delay
+   delay-ms
+   (lambda ()
+     (pty-process-run-line! pty text))))
 
 ; (define default-style (~> (style) (style-bg Color/Black) (style-fg Color/White)))
 ; (define default-style (style))
@@ -221,8 +303,10 @@
     terminal))
 
 (define (default-on-start-function terminal)
-  (pty-process-send-command (Terminal-*pty-process* terminal)
-                            (string-append "cd " (helix-find-workspace) "\r clear\r")))
+  ((terminal-startup-function "direnv allow") terminal))
+
+(define (codex-on-start-function terminal)
+  ((terminal-startup-function "codex") terminal))
 
 (define (terminal-loop term callback-function)
   ;; Kick off the terminal loop, so that we can run this
@@ -309,7 +393,7 @@
 (struct FractionAsWidth (fraction))
 (struct FractionAsHeight (fraction))
 
-(define *terminal-fraction* (/ 1 3))
+(define *terminal-fraction* (/ 1 2))
 
 ;; Do as a percentage of the terminal area, rather
 ;; than a fixed size
@@ -442,7 +526,7 @@
     (define block-area (alternative-calculate-area state rect))
 
     (define x-offset (+ 1 (area-x block-area)))
-    (define y-offset (+ 1 (area-y block-area)))
+    (define y-offset (area-y block-area))
 
     (define style-cursor (Terminal-style-cursor state))
     ; (define color-cursor-fg (Terminal-color-cursor-fg state))
@@ -467,7 +551,7 @@
     ; (block/render frame block-area (make-block (style) (style) "all" "plain"))
     (block/render frame
                   block-area
-                  (make-block (theme->bg *helix.cx*) (theme->bg *helix.cx*) "all" "plain"))
+                  (make-block (theme->bg *helix.cx*) (theme->bg *helix.cx*) "left" "plain"))
 
     ;; TODO: Don't render while its being dragged around. We should probably
     ;; rendering something like "<Rendering paused while window is being dragged>"
@@ -645,6 +729,12 @@
               (pty-process-send-command *pty-process* "\x09;")
               event-result/consume))]
 
+       [(paste-event? event)
+        (define paste-text (paste-event-string event))
+        (when paste-text
+          (pty-process-send-command *pty-process* paste-text))
+        event-result/consume]
+
        ;; TODO: Handle modifiers here
        [(key-event-up? event)
         (pty-process-send-command *pty-process* "\x1b;[A")
@@ -815,9 +905,9 @@
 ;; Hides the terminal
 (define (hide-terminal)
   (define cursor (TerminalRegistry-cursor *terminal-registry*))
-  (define term (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))
 
   (when cursor
+    (define term (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))
     (set-box! (Terminal-focused? term) #f)
     (set-box! (Terminal-active term) #f)
     (set-editor-clip-right! 0)
@@ -831,20 +921,7 @@
   ;; When the cursor exists, we defer to opening an existing one
   (cond
     [cursor (show-term (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))]
-    [else
-     ;; 45 rows, 80 cols
-     (define new-term
-       (make-terminal (string-append "Terminal-0")
-                      *default-shell*
-                      *default-terminal-rows*
-                      *default-terminal-cols*
-                      default-on-start-function
-                      vte/advance-bytes))
-
-     (set-TerminalRegistry-terminals! *terminal-registry* (list new-term))
-     (set-TerminalRegistry-cursor! *terminal-registry* 0)
-
-     (show-term new-term)]))
+    [else (open-terminal-picker)]))
 
 ;;@doc
 ;; Create a new terminal instance
@@ -860,20 +937,53 @@
      default-on-start-function
      vte/advance-bytes))
 
+  (register-terminal! new-term))
+
+(define (codex-term)
+  ;; 45 rows, 80 cols
+  (define new-term
+    (make-terminal
+     (string-append "Terminal-"
+                    (int->string (length (TerminalRegistry-terminals *terminal-registry*))))
+     *default-shell*
+     *default-terminal-rows*
+     *default-terminal-cols*
+     codex-on-start-function
+     vte/advance-bytes))
+  (register-terminal! new-term))
+
+(define (current-terminal-or-plain-shell!)
   (define cursor (TerminalRegistry-cursor *terminal-registry*))
 
-  ;; Hide the old one
-  (when cursor
-    (define existing-terminal (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))
-    (set-box! (Terminal-active existing-terminal) #f)
-    (enqueue-thread-local-callback (lambda () void)))
+  (if cursor
+      (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor)
+      (let ([terminal
+             (make-terminal
+              (string-append "Terminal-"
+                             (int->string (length (TerminalRegistry-terminals *terminal-registry*))))
+              *default-shell*
+              *default-terminal-rows*
+              *default-terminal-cols*
+              (terminal-startup-function "")
+              vte/advance-bytes)])
+        (register-terminal! terminal)
+        terminal)))
 
-  ;; Append the new terminal to the
-  (set-TerminalRegistry-terminals! *terminal-registry*
-                                   (cons new-term (TerminalRegistry-terminals *terminal-registry*)))
-  (set-TerminalRegistry-cursor! *terminal-registry* 0)
+(define (term-send-selection-to-active-terminal)
+  (define cursor (TerminalRegistry-cursor *terminal-registry*))
+  (define selection (helix.static.current-highlighted-text!))
 
-  (show-term new-term))
+  (when (and selection (not (equal? selection "")))
+    (define terminal (current-terminal-or-plain-shell!))
+    (show-term terminal)
+    (if cursor
+        (pty-process-run-line!
+         (Terminal-*pty-process* terminal)
+         selection)
+        (pty-process-run-line-after-delay!
+         (Terminal-*pty-process* terminal)
+         selection
+         *startup-command-delay-ms*))))
 
 ;;@doc
 ;; Swaps to the next active terminal, if there is one.
@@ -909,17 +1019,19 @@
 
 (define (term-resize-impl rows cols)
   (define cursor (TerminalRegistry-cursor *terminal-registry*))
-  (define terminal (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))
-  (define *vte* (Terminal-*vte* terminal))
-  (define *pty-process* (Terminal-*pty-process* terminal))
 
-  (vte/resize *vte* rows cols)
+  (when cursor
+    (define terminal (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))
+    (define *vte* (Terminal-*vte* terminal))
+    (define *pty-process* (Terminal-*pty-process* terminal))
 
-  (when *pty-process*
-    (pty-resize! *pty-process* rows cols))
+    (vte/resize *vte* rows cols)
 
-  (set-box! (Terminal-viewport-width terminal) cols)
-  (set-box! (Terminal-viewport-height terminal) rows))
+    (when *pty-process*
+      (pty-resize! *pty-process* rows cols))
+
+    (set-box! (Terminal-viewport-width terminal) cols)
+    (set-box! (Terminal-viewport-height terminal) rows)))
 
 ;;@doc
 ;; Resizes the terminal window to have the given rows and cols
@@ -938,20 +1050,22 @@
 ;; Kill the currently active terminal, if there is one.
 (define (kill-active-terminal)
   (define cursor (TerminalRegistry-cursor *terminal-registry*))
-  ;; Stop the terminal before we remove it
-  (stop-terminal (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))
 
-  ;; Drop the struct from the active terminal list.
-  (set-TerminalRegistry-terminals! *terminal-registry*
-                                   (remove-nth (TerminalRegistry-terminals *terminal-registry*)
-                                               cursor))
+  (when cursor
+    ;; Stop the terminal before we remove it
+    (stop-terminal (list-ref (TerminalRegistry-terminals *terminal-registry*) cursor))
 
-  ;; Move the cursor to the first one, if it exists, otherwise false
-  (if (empty? (TerminalRegistry-terminals *terminal-registry*))
-      (begin
-        (set-TerminalRegistry-cursor! *terminal-registry* #f)
-        (set-editor-clip-right! 0))
-      (set-TerminalRegistry-cursor! *terminal-registry* 0))
+    ;; Drop the struct from the active terminal list.
+    (set-TerminalRegistry-terminals! *terminal-registry*
+                                     (remove-nth (TerminalRegistry-terminals *terminal-registry*)
+                                                 cursor))
+
+    ;; Move the cursor to the first one, if it exists, otherwise false
+    (if (empty? (TerminalRegistry-terminals *terminal-registry*))
+        (begin
+          (set-TerminalRegistry-cursor! *terminal-registry* #f)
+          (set-editor-clip-right! 0))
+        (set-TerminalRegistry-cursor! *terminal-registry* 0)))
 
   (enqueue-thread-local-callback (lambda () void)))
 
@@ -1019,6 +1133,12 @@
               (pty-process-send-command *pty-process* "\x09;")
               event-result/consume-without-rerender))]
 
+       [(paste-event? event)
+        (define paste-text (paste-event-string event))
+        (when paste-text
+          (pty-process-send-command *pty-process* paste-text))
+        event-result/consume-without-rerender]
+
        ;; TODO: Handle modifiers here
        [(key-event-up? event)
         (pty-process-send-command *pty-process* "\x1b;[A")
@@ -1064,7 +1184,11 @@
   (vte/resize *vte* rows cols)
   (pty-resize! *pty-process* rows cols)
 
-  (pty-process-send-command *pty-process* (string-append "cd " (helix-find-workspace) " && xplr\r"))
+  (define workspace (helix-find-workspace))
+  (pty-process-run-line-after-delay!
+   *pty-process*
+   (string-append "cd -- " workspace " && xplr")
+   *startup-command-delay-ms*)
 
   (let ([terminal (Terminal "xplr"
                             (position 0 0)

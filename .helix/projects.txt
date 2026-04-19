@@ -70,3 +70,4 @@
 /sources/mgba
 /sources/raylib-zig
 /sources/helix-steel
+/home/Designers/.config/oxwm
